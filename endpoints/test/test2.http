@@ -1,0 +1,92 @@
+###
+//list users of database (Standard Admin ..)
+GET http://localhost:8080/publicUser
+
+
+
+###
+POST http://localhost:8080/authenticate/
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "password": "123"
+}
+
+###
+POST http://localhost:8080/user/
+Content-Type: application/json
+
+{
+    "userID": "admin",
+    "password": "123"
+}
+
+//Login mit Basic authentication mit korrektem Credentials admin:123
+###
+POST http://localhost:8080/authenticate/
+Authorization: Basic YWRtaW46MTIz
+
+
+// Login mit Basic Authentication mit falschem Credentials
+###
+POST http://localhost:8080/authenticate/
+Authorization: Basic admin:123
+
+//list all Users without Token (should give an error)
+###
+GET http://localhost:8080/user/
+
+//list all users with token(admin)
+###
+GET http://localhost:8080/user/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
+
+
+// List all threads(Forum) without token
+###
+GET http://localhost:8080/forum/
+
+
+//Create Forum as Admin
+###
+POST http://localhost:8080/forum/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluaXN0cmF0b3IiOnRydWUsInVzZXJJRCI6ImFkbWluIiwiaWF0IjoxNjM5NzQxNTE5fQ.TdRvrwhI_hPMeSiNRGEZ4OfCfp6unm0FztbbM3K2CVU
+Content-Type: application/json
+
+{
+    "forumName": "Mein erstes Forum Manfred 3",
+    "forumDescription": "Das ist ein erstes Forum, das ich im Rahmen der Tests angelegt habe."
+}
+
+
+//list all threads(Forum)
+###
+http://localhost:8080/forum/
+
+
+
+//Change forumDescription with Authentication
+###
+PUT http://localhost:8080/forum/
+Authorization: Bearer 
+Content-Type: application/json
+
+{
+    "_id": "",
+    "forumDescription": "Das ist der neue Text."
+}
+
+###
+GET http://localhost:8080/forum/getByToken
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
+
+### list thread from user manfred (if exist) but only admin has access
+POST http://localhost:8080/forum/getByOwnerID
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
+Content-Type: application/json
+
+{
+    "ownerID" : "manfred"
+}
+
