@@ -76,7 +76,7 @@ exports.getByOwnerID = async (req, res, next) => {
 
 exports.getByToken = async (req, res, next) => {
   // User-Objekt aus der DB holen
-  const user = await User.findOne({ userID: req.token._id });
+  const user = await User.findOne({ _id: req.token._id });
   // Wenn der User nicht gefunden wird, Fehler senden
   if(!user) {
     

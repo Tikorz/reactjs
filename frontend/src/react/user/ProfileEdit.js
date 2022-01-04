@@ -3,6 +3,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from "../../redux/actions/userActions";
 
 import "./ProfileEdit.css";
 import ErrorMessage from "../components/ErrorMessage";
@@ -33,7 +34,10 @@ const ProfileEdit = ({ history }) => {
     
   }, [history,userInfo])
   const submitHandler = (e) => {
+    console.log("anything");
     e.preventDefault();
+    dispatch(updateUser({ userID, userName, password }));
+    
   };
   return (
     <MainScreen title="EDIT PROFILE">
@@ -74,7 +78,7 @@ const ProfileEdit = ({ history }) => {
                 ></Form.Control>
               </Form.Group>
 
-              <Button type="submit" varient="primary">
+              <Button type="submit" varient="primary" onClick={submitHandler}>
                 Update
               </Button>
             </Form>

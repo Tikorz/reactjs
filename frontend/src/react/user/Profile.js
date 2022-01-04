@@ -5,6 +5,7 @@ import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
 
 import "./ProfileEdit.css";
+import { updateUser } from "../../redux/actions/userActions";
 import ErrorMessage from "../components/ErrorMessage";
 
 import Loading from "../components/Loading";
@@ -34,6 +35,7 @@ const Profile = ({ history }) => {
   }, [history,userInfo])
   const submitHandler = (e) => {
     e.preventDefault();
+    dispatch(updateUser({ userID, userName, password }));
   };
   return (
     <MainScreen title="EDIT PROFILE">
@@ -74,7 +76,7 @@ const Profile = ({ history }) => {
                 ></Form.Control>
               </Form.Group>
 
-              <Button type="submit" varient="primary">
+              <Button type="submit" varient="primary" onClick={submitHandler}>
                 Update
               </Button>
             </Form>

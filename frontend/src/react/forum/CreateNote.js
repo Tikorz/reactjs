@@ -7,9 +7,9 @@ import { createNoteAction } from "../../redux/actions/noteActions";
 import ReactMarkdown from "react-markdown";
 
 function CreateNote({ history }) {
-  const [title, setTitle] = useState("");
-  const [content, setContent] = useState("");
-  const [category, setCategory] = useState("");
+  const [forumName, setforumName] = useState("");
+  const [forumDescription, setforumDescription] = useState("");
+
 
   const dispatch = useDispatch();
 
@@ -19,15 +19,15 @@ function CreateNote({ history }) {
   console.log(note);
 
   const resetHandler = () => {
-    setTitle("");
-    setCategory("");
-    setContent("");
+    setforumName("");
+    setforumDescription("");
+   
   };
 
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(createNoteAction(title, content, category));
-    if (!title || !content || !category) return;
+    dispatch(createNoteAction(forumName, forumDescription));
+    if (!forumName || !forumDescription) return;
 
     resetHandler();
     history.push("/mynotes");
@@ -42,44 +42,35 @@ function CreateNote({ history }) {
         <Card.Body>
           <Form onSubmit={submitHandler}>
            
-            <Form.Group controlId="title">
-              <Form.Label>Title</Form.Label>
+            <Form.Group controlId="forumName">
+              <Form.Label>forumName</Form.Label>
               <Form.Control
                 type="title"
-                value={title}
-                placeholder="Enter the title"
-                onChange={(e) => setTitle(e.target.value)}
+                value={forumName}
+                placeholder="Enter the forumName"
+                onChange={(e) => setforumName(e.target.value)}
               />
             </Form.Group>
 
-            <Form.Group controlId="content">
-              <Form.Label>Content</Form.Label>
+            <Form.Group controlId="forumDescription">
+              <Form.Label>forumDescription</Form.Label>
               <Form.Control
                 as="textarea"
-                value={content}
-                placeholder="Enter the content"
+                value={forumDescription}
+                placeholder="Enter the forumDescription"
                 rows={4}
-                onChange={(e) => setContent(e.target.value)}
+                onChange={(e) => setforumDescription(e.target.value)}
               />
             </Form.Group>
-            {content && (
+            {forumDescription && (
               <Card>
                 <Card.Header>Note Preview</Card.Header>
                 <Card.Body>
-                  <ReactMarkdown>{content}</ReactMarkdown>
+                  <ReactMarkdown>{forumDescription}</ReactMarkdown>
                 </Card.Body>
               </Card>
             )}
 
-            <Form.Group controlId="content">
-              <Form.Label>Category</Form.Label>
-              <Form.Control
-                type="content"
-                value={category}
-                placeholder="Enter the Category"
-                onChange={(e) => setCategory(e.target.value)}
-              />
-            </Form.Group>
             
             <Button type="submit" variant="primary">
               Create Note

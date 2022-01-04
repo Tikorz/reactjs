@@ -67,8 +67,8 @@ export const login = (userID, password) => async (dispatch) => {
           config.token = response.data;
 
         }
+        localStorage.setItem("userInfo", JSON.stringify(config));
         
-        localStorage.setItem("userInfo", JSON.stringify(data));
        
         
       } catch (error) {
@@ -135,21 +135,21 @@ export const createUser =(userID, userName, password) => async (dispatch) => {
       const {
         userLogin: { userInfo },
       } = getState();
-  
+      
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.token.token}`,
         },
       };
-  
+      console.log(user);
       const { data } = await axios.put("http://localhost:8080/user/", user, config);
   
       dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
   
       dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
   
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      
     } catch (error) {
       dispatch({
         type: USER_UPDATE_FAIL,

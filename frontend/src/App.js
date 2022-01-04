@@ -42,7 +42,7 @@ function App  () {
       <Route path='/profileedit' component={ProfileEdit} exact />
       <Route path='/userManagement' component={UserManagement} exact />
       <Route path='/createUser' component={CreateUser} exact />
-      <Route path='/createNote' component={CreateNote} exact />
+      <Route path='/createForum' component={CreateNote} exact />
     </main>
     <Footer />
   </BrowserRouter>

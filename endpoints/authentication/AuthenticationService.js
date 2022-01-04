@@ -50,7 +50,7 @@ exports.login = async (req,res) =>{
   return res.header('Authorization', 'Bearer ' + token).json({ token });
 }
 
-
+/*
 exports.update = async (req,res,next) => {
   try {
       const result = await User.findOneAndUpdate(
@@ -60,6 +60,7 @@ exports.update = async (req,res,next) => {
           {
               userName: req.body.userName
           },
+          
           {
               upsert: true,
               new: true
@@ -69,7 +70,34 @@ exports.update = async (req,res,next) => {
   }catch(err){
       res.status(401).json(err);
   }
-}
+}*/
+
+exports.update = async (req, res) => {
+
+  const user = await User.findById(req.user._id);
+
+  if (user) {
+    user.userID = req.body.userID || user.userID;
+    user.userName = req.body.userName || user.userName;
+    user.password = req.body.password || user.password;
+    if (req.body.password) {
+      user.password = req.body.password;
+    }
+
+    const updatedUser = await user.save();
+
+    res.json({
+      _id: updatedUser._id,
+      userID: updatedUser.userID,
+      userName: updatedUser.userName,
+      password: updatedUser.password,
+      //token: generateToken(updatedUser._id),
+    });
+  } else {
+    res.status(404);
+    throw new Error("User Not Found");
+  }
+};
 
 exports.getByUserID = function (req, res, next) {
   User.findById(req.body.userID, { password: 0 }, function (err, user) {

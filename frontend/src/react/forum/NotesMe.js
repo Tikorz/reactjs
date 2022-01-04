@@ -16,12 +16,14 @@ function NotesMe ({ history,search }){
     const { userInfo } = userLogin;
 
     const noteList = useSelector(state => state.noteList);
-    const { forum } = noteList;
-
+    const { notes } = noteList;
+    console.log(noteList);
 
     const deleteHandler = (_id) => {
       if (window.confirm("Are you sure?")) {
+        
         dispatch(deleteNoteAction(_id));
+        
       }
     }
 
@@ -32,7 +34,7 @@ function NotesMe ({ history,search }){
   return (
     
     <MainScreen title={` ${userInfo.auth.username}´s Forum..`}>
-      {console.log(forum)}
+     
    
 
     <Link to="createForum">
@@ -42,8 +44,8 @@ function NotesMe ({ history,search }){
     </Link>
   
     {/*{forum.map(forum => (*/}
-      {forum &&
-        forum?.map((forum) => (
+      {notes &&
+        notes?.map((forum) => (
           <Accordion>
               <Card style={{ margin: 10 }} key={forum._id}>
           <Card.Header style={{ display: "flex" }}>
