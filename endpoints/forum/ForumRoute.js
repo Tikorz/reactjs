@@ -19,7 +19,7 @@ router.put('/',verifyToken,ForumService.update);
 
 //Delete Forum
 
-router.post('/delete', verifyToken,ForumService.delete);
+router.delete('/delete', verifyToken,ForumService.delete);
 
 //Get Forum by Token
 router.get('/getByToken',verifyToken,ForumService.getByToken);

@@ -39,7 +39,7 @@ const TopMenu = () => {
                 
                   {userInfo ? (
       
-                  <NavDropdown title= {userInfo.userName} id="basic-nav-dropdown">
+                  <NavDropdown title= {userInfo.userID} id="basic-nav-dropdown">
                   <NavDropdown.Divider />
                   <NavDropdown.Item>
                       <Link to="/notesMe">

@@ -13,26 +13,40 @@ exports.getForums = async(req,res) =>{
 
 exports.create = async (req, res) => {
   const { forumName, forumDescription } = req.body;
+  console.log("1")
   const token = req.token;
+  console.log("2")
   const forumExist = await Forum.findOne({ forumName: req.body.forumName });
+  console.log("3")
   if (forumExist) {
+    console.log("4")
     
     return res.status(400).send("Forum Exists already.");
+    console.log("5")
   }
   try {
+    console.log("6")
     const owner = await User.findOne({ userID: token._id });
+    console.log("7")
     if (!forumName || !forumDescription) {
+      console.log("8")
       return res.status(400).send('Not all fields filled in');
+      console.log("9")
     } else {
+      console.log("10")
       const newForum = new Forum({
         forumName,
         forumDescription,
         user: owner.userID,
       });
+      console.log("11")
       newForum.user = owner;
+      console.log("12")
       const createdNote = await newForum.save();
-    
+      console.log("13")
+     
       return res.status(201).json(createdNote);
+  
     }
   } catch (err) {
    

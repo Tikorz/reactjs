@@ -3,14 +3,14 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
+import { updateUser } from "../../redux/actions/userActions";
 
 import "./ProfileEdit.css";
-import { updateUser } from "../../redux/actions/userActions";
 import ErrorMessage from "../components/ErrorMessage";
 
 import Loading from "../components/Loading";
 
-const Profile = ({ history }) => {
+const ProfileEdit = ({ history }) => {
   const [userID, setuserID] = useState("");
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
@@ -34,8 +34,10 @@ const Profile = ({ history }) => {
     
   }, [history,userInfo])
   const submitHandler = (e) => {
+    console.log("anything");
     e.preventDefault();
     dispatch(updateUser({ userID, userName, password }));
+    
   };
   return (
     <MainScreen title="EDIT PROFILE">
@@ -48,13 +50,13 @@ const Profile = ({ history }) => {
               </ErrorMessage>
 
               {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-              <Form.Group controlId="userID">
+              <Form.Group  controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter userID"
-                  value={userID}
-                  onChange={(e) => setuserID(e.target.value)}
+                  //type="text"
+                  //placeholder="Enter userID"
+                  readonly={userID}
+                  /*onChange={(e) => setuserID(e.target.value)}*/
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId="userName">
@@ -88,7 +90,7 @@ const Profile = ({ history }) => {
               justifyContent: "center",
             }}
           >
-            
+            {/*<img src={pic} alt={userID} className="profilePic" />*/}
           </Col>
         </Row>
       </div>
@@ -96,4 +98,4 @@ const Profile = ({ history }) => {
   );
 };
 
-export default Profile;
+export default ProfileEdit;

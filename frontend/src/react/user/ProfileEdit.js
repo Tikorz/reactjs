@@ -50,13 +50,13 @@ const ProfileEdit = ({ history }) => {
               </ErrorMessage>
 
               {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-              <Form.Group controlId="userID">
+              <Form.Group  controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
-                  type="text"
-                  placeholder="Enter userID"
-                  value={userID}
-                  onChange={(e) => setuserID(e.target.value)}
+                  //type="text"
+                  //placeholder="Enter userID"
+                  readonly={userID}
+                  /*onChange={(e) => setuserID(e.target.value)}*/
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId="userName">

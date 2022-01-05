@@ -58,7 +58,9 @@ export const login = (userID, password) => async (dispatch) => {
           console.log(decodedToken);
           data.userName =  decodedToken.userName;
           data.isAdministrator = decodedToken.isAdministrator;
+          data.userID = decodedToken.userID;
           data._id = decodedToken._id;
+          config.userID = data.userID;
           config.isAdministrator = data.isAdministrator;
           config.userName = data.userName;
           config._id = data._id;
