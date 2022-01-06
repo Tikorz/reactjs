@@ -50,15 +50,19 @@ exports.login = async (req,res) =>{
   return res.header('Authorization', 'Bearer ' + token).json({ token });
 }
 
-
 exports.update = async (req,res,next) => {
+
   try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+
       const result = await User.findOneAndUpdate(
           {
-              userID: req.user.token,
+              userID: req.token.userID,
           },
           {
-              userName: req.body.userName
+              password: hashedPassword
+            
           },
           
           {
@@ -71,6 +75,7 @@ exports.update = async (req,res,next) => {
       res.status(401).json(err);
   }
 }
+
 
 exports.getByUserID = function (req, res, next) {
   User.findById(req.body.userID, { password: 0 }, function (err, user) {

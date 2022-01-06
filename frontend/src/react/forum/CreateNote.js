@@ -30,7 +30,7 @@ function CreateNote({ history }) {
     if (!forumName || !forumDescription) return;
 
     resetHandler();
-    history.push("/mynotes");
+    history.push("/notesMe");
   };
 
   useEffect(() => {}, []);

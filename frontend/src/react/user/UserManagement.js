@@ -3,7 +3,7 @@ import { Card,Accordion, Button} from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainScreen from "../components/MainScreen";
 import { useSelector, useDispatch } from 'react-redux';
-import { deleteUserAction } from "../../redux/actions/userActions";
+import { deleteUserAction, updateUser, register} from "../../redux/actions/userActions";
 import "./ProfileEdit.css";
 
 import axios from "axios";
@@ -12,18 +12,17 @@ import ReactMarkdown from "react-markdown";
 
 function UserManagement({ history }) {
  
-  const dispatch = useDispatch
-  const submitHandler = (e) => {
-    e.preventDefault();
-  };
+  const dispatch = useDispatch();
+
+  
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
   const deleteUser = useSelector((state) => state.deleteUser);
 
-  const createUser = useSelector((state) => state.createUser);
+  const userRegister = useSelector((state) => state.userRegister);
 
-  const updateUser = useSelector((state) => state.updateUser);
+  const userUpdate = useSelector((state) => state.userUpdate);
 
 
 
@@ -45,6 +44,14 @@ function UserManagement({ history }) {
     }
   };
 
+  const submitHandler = (e, _id) => {
+    e.preventDefault();
+    dispatch(updateUser(_id));
+  };
+
+  
+  
+
   return (
     <MainScreen title={`List of Users`}>
        <Link to="/createUser">
@@ -54,7 +61,7 @@ function UserManagement({ history }) {
       </Link>
      
       {users &&
-        users.map((users) => (
+        users?.map((users) => (
           <Accordion>
             <Card style={{ margin: 10 }} key={users._id}>
               <Card.Header style={{ display: "flex" }}>
@@ -73,11 +80,11 @@ function UserManagement({ history }) {
                       {users.userName}               
                 </span>
                 <div>
-                    <Button to='updateUser'>Edit</Button>
+                    <Button to='profileedit' >Edit</Button>
                     <Button
                       variant="danger"
                       className="mx-2"
-                      onClick={() => deleteHandler(users._id)}
+                      onClick={() => deleteHandler(users.id)}
                     >
                       Delete
                     </Button>

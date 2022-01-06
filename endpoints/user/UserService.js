@@ -84,14 +84,17 @@ const SECRET_KEY = process.env.TOKEN_KEY;
 exports.update = async (req,res,next) => {
 
   try {
+    const salt = await bcrypt.genSalt(10);
+    const hashedPassword = await bcrypt.hash(req.body.password, salt);
+    
+
       const result = await User.findOneAndUpdate(
           {
-              userID: req.token.userID,
+              userID: req.body.userID,
           },
           {
-              userName: req.body.userName,
-              password: req.body.password(bcryp.hash(10,bcrypt.genSalt))
-            
+            userName: req.body.userName,
+            password: hashedPassword
           },
           
           {
@@ -127,9 +130,9 @@ exports.getUsers = async (req, res) => {
   
 
 exports.deleteUser = async (req, res) => {
-    const user = await User.findById(req.params.id);
+    const user = await User.findById(req.params._id);
   
-    if (user.user.toString() !== req.user._id.toString()) {
+    if (user.user.toString() !== req.params._id.toString()) {
       res.status(401);
       throw new Error("You can't perform this action");
     }
@@ -142,4 +145,14 @@ exports.deleteUser = async (req, res) => {
       throw new Error("User not Found");
     }
   };
+
+  // deleting data of user from the database
+exports.deleteUser = async (request, response) => {
+  try{
+      await User.deleteOne({id: request.params.id});
+      response.status(201).json("User deleted Successfully");
+  } catch (error){
+      response.status(409).json({ message: error.message});     
+  }
+}
 

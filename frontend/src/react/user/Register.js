@@ -2,7 +2,7 @@ import React, { useState,useEffect } from "react";
 import { Form, Button} from "react-bootstrap";
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
-import { createUser } from '../../redux/actions/userActions';
+import { register } from '../../redux/actions/userActions';
 
 const Register = ({history}) => {
 
@@ -13,8 +13,8 @@ const Register = ({history}) => {
 
   const dispatch = useDispatch();
 
-  const createUser = useSelector((state) => state.createUser);
-  const { /*loading, error,*/ userInfo } = createUser;
+  const userRegister = useSelector((state) => state.userRegister);
+  const { userInfo } = userRegister;
   
 
 
@@ -33,7 +33,7 @@ const Register = ({history}) => {
       setMessage('Password must be set');
     }
     else{
-      dispatch(createUser(userID,userName,password));
+      dispatch(register(userID,userName,password));
     }
   }
 

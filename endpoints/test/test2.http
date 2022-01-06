@@ -33,6 +33,15 @@ Authorization: Basic YWRtaW46MTIz
 POST http://localhost:8080/authenticate/
 Authorization: Basic admin:123
 
+
+###
+DELETE http://localhost:8080/user/:_id
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
+Content-Type: application/json
+
+{
+    "_id": "61d5c27952b817e9a5dec1ef"
+}
 //list all Users without Token (should give an error)
 ###
 GET http://localhost:8080/user/
@@ -41,6 +50,21 @@ GET http://localhost:8080/user/
 ###
 GET http://localhost:8080/user/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
+
+###
+PUT http://localhost:8080/user/
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MTMzODU4MywiZXhwIjoxNjQzOTMwNTgzfQ.0DWqhN_AkJ6cx1TauNPKOjD8Uq-XXXFdBdaOm7NBwJA
+Content-Type: application/json
+
+{
+
+     "userID": "manfred",
+    "userName": "manfred12",
+   "password": "123"
+    
+    
+
+}
 
 
 // List all threads(Forum) without token
@@ -51,11 +75,11 @@ GET http://localhost:8080/forum/
 //Create Forum as Admin
 ###
 POST http://localhost:8080/forum/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc0FkbWluaXN0cmF0b3IiOnRydWUsInVzZXJJRCI6ImFkbWluIiwiaWF0IjoxNjM5NzQxNTE5fQ.TdRvrwhI_hPMeSiNRGEZ4OfCfp6unm0FztbbM3K2CVU
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MTMzODU4MywiZXhwIjoxNjQzOTMwNTgzfQ.0DWqhN_AkJ6cx1TauNPKOjD8Uq-XXXFdBdaOm7NBwJA
 Content-Type: application/json
 
 {
-    "forumName": "Mein erstes Forum Manfred 3",
+    "forumName": "Mein erstes Forum Admin Test2",
     "forumDescription": "Das ist ein erstes Forum, das ich im Rahmen der Tests angelegt habe."
 }
 
@@ -64,7 +88,15 @@ Content-Type: application/json
 ###
 http://localhost:8080/forum/
 
+###
+PUT http://localhost:8080/forum/
+Authorization: Bearer 
+Content-Type: application/json
 
+{
+    "userName": "userName",
+    "forumDescription": "Das ist der neue Text."
+}
 
 //Change forumDescription with Authentication
 ###

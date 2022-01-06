@@ -34,7 +34,7 @@ const ProfileEdit = ({ history }) => {
     
   }, [history,userInfo])
   const submitHandler = (e) => {
-    console.log("anything");
+    
     e.preventDefault();
     dispatch(updateUser({ userID, userName, password }));
     
@@ -71,9 +71,9 @@ const ProfileEdit = ({ history }) => {
               <Form.Group controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
-                  type="password"
+                  //type="password"
                   placeholder="Enter Password"
-                  value={password}
+                  value={""}
                   onChange={(e) => setPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>

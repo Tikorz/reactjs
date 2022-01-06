@@ -90,44 +90,44 @@ export const logout = () => async (dispatch) => {
     dispatch({ type: USER_LOGOUT });
   };
 
-export const createUser =(userID, userName, password) => async (dispatch) => {
-   try {
-      dispatch({ type: USER_REGISTER_REQUEST});
-      
-       const config = {
-         headers: {
-           "Content-type": "application/json",
-         }
-       };
-       const { data } = await axios.post('http://localhost:8080/user/', 
-       {
-         userID,
-         userName,
-         password
-       },
-       config
-       );
-       console.log(data);
 
-       dispatch({ type: USER_REGISTER_SUCCESS, payload: config});
-       
-       dispatch({ type: USER_LOGIN_SUCCESS, payload: config});
 
-       localStorage.setItem("userInfo", JSON.stringify(data));
-        
+  export const register =
+  (userID, userName, password) => async (dispatch, getState) => {
+    try {
+      dispatch({
+        type: USER_REGISTER_REQUEST,
+      });
+
+
+      const config = {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      };
+      const url = "http://localhost:8080/user/";
+
+      const { data } = await axios.post(
+        url,
+        { userID, userName, password },
+        config
+      );
+
+      dispatch({
+        type: USER_REGISTER_SUCCESS,
+        payload: data,
+      });
     } catch (error) {
-        dispatch({
-            type: USER_REGISTER_FAIL,
-            payload:
-                error.response && error.response.data.message
-                    ? error.response.data.message
-                    : error.message,
-        });
-       //setError(error.response.data.message);
-       console.log(error);
-        
-      }
-  }
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
+      dispatch({
+        type: USER_REGISTER_FAIL,
+        payload: message,
+      });
+    }
+  };
 
 
   export const updateUser = (user) => async (dispatch, getState) => {
@@ -194,33 +194,38 @@ export const createUser =(userID, userName, password) => async (dispatch) => {
     }
   };
 
-  export const deleteUserAction = (user) => async (dispatch, getState) => {
+  export const deleteUserAction = (_id) => async (dispatch, getState) => {
     try {
-      dispatch({ type: USER_DELETE_REQUEST});
+      dispatch({
+        type: USER_DELETE_REQUEST,
+      });
   
       const {
         userLogin: { userInfo },
       } = getState();
   
+      const url = "http://localhost:8080/user/";
+  
       const config = {
         headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token}`,
+          Authorization: `Bearer ${userInfo.token.token}`,
         },
       };
+      console.log(userInfo.token.token);
+      const { data } = await axios.delete(url, config);
   
-      const { data } = await axios.delete("http://localhost:8080/user/", user, config);
-  
-      dispatch({ type: USER_DELETE_SUCCESS, payload: data });
-  
-      localStorage.setItem("userInfo", JSON.stringify(data));
+      dispatch({
+        type: USER_DELETE_SUCCESS,
+        payload: data,
+      });
     } catch (error) {
+      const message =
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message;
       dispatch({
         type: USER_DELETE_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
+        payload: message,
       });
     }
   };
