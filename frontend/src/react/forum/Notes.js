@@ -1,32 +1,37 @@
-import React, { useEffect, useState } from "react";
-import {  Card, Accordion } from "react-bootstrap";
-
+import React, { useEffect } from "react";
+import { Accordion, Button } from "react-bootstrap";
 import MainScreen from "../components/MainScreen";
-import axios from "axios";
 import ReactMarkdown from "react-markdown";
-//import { useDispatch} from "react-redux";
+import { useDispatch, useSelector } from "react-redux";
+import Messages from "../messages/Messages";
+import SendIcon from "@mui/icons-material/Send";
+import "./Notes.css";
+import { listForum } from "../../redux/forum/noteActions";
 
+function Notes({ history, search }) {
+  const dispatch = useDispatch();
 
-function Notes({ search }) {
-  /*const dispatch = useDispatch();*/
+  const userLogin = useSelector((state) => state.userLogin);
+  const { userInfo } = userLogin;
 
-  const [forum, setForum] = useState([]);
+  const noteList = useSelector((state) => state.noteList);
+  const { notes } = noteList;
+  console.log(noteList);
 
   useEffect(() => {
-    axios
-      .get("http://localhost:8080/forum")
-      .then((response) => setForum(response.data));
-  }, []);
+    dispatch(listForum());
+  }, [dispatch, history]);
+
+  console.log(notes);
 
   return (
     <MainScreen title={`List of Forum`}>
-      {forum &&
-        forum.map((forum) => (
-          <Accordion>
-            <Card style={{ margin: 10 }} key={forum._id}>
-              <Card.Header style={{ display: "flex" }}>
+      {notes &&
+        notes?.map((forum) => (
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item style={{ margin: 10 }} key={forum._id}>
+              <Accordion.Header style={{ display: "flex" }}>
                 <span
-                  // onClick={() => ModelShow(note)}
                   style={{
                     color: "black",
                     textDecoration: "none",
@@ -36,27 +41,22 @@ function Notes({ search }) {
                     fontSize: 18,
                   }}
                 >
-                  
-                      {forum.forumName}
-               
+                  {forum.forumName}
                 </span>
-              </Card.Header>
-      
-              <Card.Body>
+              </Accordion.Header>
+              <Accordion.Body>
                 <blockquote className="blockquote mb-0">
                   <ReactMarkdown>{forum.forumDescription}</ReactMarkdown>
                   <footer className="blockquote-footer">
-                        Created on{" "}
-                        <cite title="Source Title">
-                          {forum.published_on.substring(0, 300)}
-                          {forum.user}
-                          
-                        </cite>
-                      </footer>
+                    Created by:{forum.user?.userName}
+                    Created on:{forum.published_on.substring(0, 300)}
+                  </footer>
                 </blockquote>
-              </Card.Body>
-             
-            </Card>
+                <div className="messages">
+                  <Messages forum={forum} />
+                </div>
+              </Accordion.Body>
+            </Accordion.Item>
           </Accordion>
         ))}
     </MainScreen>

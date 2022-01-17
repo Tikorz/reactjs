@@ -9,7 +9,10 @@ import {
     USER_UPDATE_FAIL,
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS,
-  } from "../constants/userConstants";
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
+    USER_LIST_FAIL,
+  } from "./userConstants";
   
   export const userLoginReducer = (state = {}, action) => {
     switch (action.type) {
@@ -52,4 +55,16 @@ import {
     }
   };
   
+  export const userListReducer = (state = {}, action) => {
+    switch (action.type) {
+      case USER_LIST_REQUEST:
+        return { loading: true };
+      case USER_LIST_SUCCESS:
+        return { loading: true, users: action.payload, success: true };
+      case USER_LIST_FAIL:
+        return { loading: false, error: action.payload, success: false };
+      default:
+        return state;
+    }
+  }
   

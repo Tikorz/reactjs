@@ -35,13 +35,10 @@ Authorization: Basic admin:123
 
 
 ###
-DELETE http://localhost:8080/user/:_id
+DELETE http://localhost:8080/user/61dd8e2e9dddda1628299723
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
-Content-Type: application/json
 
-{
-    "_id": "61d5c27952b817e9a5dec1ef"
-}
+
 //list all Users without Token (should give an error)
 ###
 GET http://localhost:8080/user/
@@ -72,15 +69,15 @@ Content-Type: application/json
 GET http://localhost:8080/forum/
 
 
-//Create Forum as Admin
+//Create Forum as 
 ###
 POST http://localhost:8080/forum/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MTMzODU4MywiZXhwIjoxNjQzOTMwNTgzfQ.0DWqhN_AkJ6cx1TauNPKOjD8Uq-XXXFdBdaOm7NBwJA
 Content-Type: application/json
 
 {
-    "forumName": "Mein erstes Forum Admin Test2",
-    "forumDescription": "Das ist ein erstes Forum, das ich im Rahmen der Tests angelegt habe."
+    "forumName": "testtest23",
+    "forumDescription": "testing."
 }
 
 

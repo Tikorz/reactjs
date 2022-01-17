@@ -11,7 +11,7 @@ import {
   NOTES_UPDATE_FAIL,
   NOTES_UPDATE_REQUEST,
   NOTES_UPDATE_SUCCESS,
-} from "../constants/notesConstants";
+} from "./notesConstants";
 import axios from "axios";
 
 export const listForum = () => async (dispatch) => {
@@ -20,16 +20,22 @@ export const listForum = () => async (dispatch) => {
       type: NOTES_LIST_REQUEST,
     });
 
+    const config = {
+      headers: {
+        "Content-Type": "application/json"
+      }
+    }
     const url = "http://localhost:8080/forum/";
 
-    const data = {};
-    const response = await axios.get(url, data);
+  
+    const {data} = await axios.get(url, config);
+
 
     dispatch({
       type: NOTES_LIST_SUCCESS,
       payload: data,
     });
-    localStorage.setItem("forumInfo", JSON.stringify(response));
+    //localStorage.setItem("forumInfo", JSON.stringify(response));
   } catch (error) {
     const message =
       error.response && error.response.data.message

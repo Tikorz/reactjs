@@ -20,9 +20,6 @@ const UserSchema = mongoose.Schema({
         type: Boolean,
         deafult: false,
     },
-    token: {
-        type: String
-    },
   
 });
 

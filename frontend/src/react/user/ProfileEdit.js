@@ -3,7 +3,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
-import { updateUser } from "../../redux/actions/userActions";
+import { updateUser } from "../../redux/user/userActions";
 
 import "./ProfileEdit.css";
 import ErrorMessage from "../components/ErrorMessage";
@@ -14,6 +14,7 @@ const ProfileEdit = ({ history }) => {
   const [userID, setuserID] = useState("");
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
+  const [users, setUsers] = useState([]);
   
 
   const dispatch = useDispatch();
@@ -40,44 +41,41 @@ const ProfileEdit = ({ history }) => {
     
   };
   return (
-    <MainScreen title="EDIT PROFILE">
+    <MainScreen title="EDIT PROFILE OF ANOTHER USER">
       <div>
         <Row className="profileContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
-              <ErrorMessage variant="success">
-                Updated Successfully
-              </ErrorMessage>
-
-              {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
               <Form.Group  controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
-                  //type="text"
-                  //placeholder="Enter userID"
-                  readonly={userID}
-                  /*onChange={(e) => setuserID(e.target.value)}*/
+                  id="UserIDInput"
+                  type="text"
+                  placeholder="Enter userID"
+                  value={users.userID}
+                  onChange={(e) => setuserID(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId="userName">
                 <Form.Label>userName</Form.Label>
                 <Form.Control
+                  id="UserNameInput"
                   type="text"
                   placeholder="Enter userName"
-                  value={userName}
+                  value={users.userName}
                   onChange={(e) => setuserName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
+                  id="PasswordInput"
                   type="password"
                   placeholder="Enter Password"
-                  value={password}
+                  value={users.password}
                   onChange={(e) => setPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-
               <Button type="submit" varient="primary" onClick={submitHandler}>
                 Update
               </Button>
@@ -90,7 +88,6 @@ const ProfileEdit = ({ history }) => {
               justifyContent: "center",
             }}
           >
-            {/*<img src={pic} alt={userID} className="profilePic" />*/}
           </Col>
         </Row>
       </div>

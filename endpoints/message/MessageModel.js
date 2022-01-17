@@ -2,18 +2,19 @@ const mongoose = require('mongoose');
 const moment = require('moment');
 const Schema = mongoose.Schema;
 
-MessageSchema = new mongoose.Schema({
+const MessageSchema = new mongoose.Schema({
     forumID: {
-        type: mongoose.Schema.Types.ObjectId, ref: "Forum"
-    },
-    messageTitle: {
-        type: String,
+        type: Schema.Types.ObjectId, ref: "Forum"
     },
     messageText: {
         type: String,
     },
-    createdBy: { 
-        type: Schema.Types.ObjectId, ref: 'User' 
+    user: { 
+        type: Schema.Types.ObjectId, ref: 'user' 
+    },
+    createdDate: {
+        type: Date
+
     },
 });
 

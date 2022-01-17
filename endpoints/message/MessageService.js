@@ -1,40 +1,47 @@
 const MessageModel = require('../message/MessageModel');
 const Message = require('../message/MessageModel');
+const Forum = require('../forum/ForumModel');
+const User = require('../user/UserModel');
 const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const mongoose = require('mongoose');
 
-exports.getMessages = function(req, res){
-    Message.find(function(err, Message){
-        if(err){
-            throw err;
-        }
-        res.json(Message);
-    });
-};
 
-exports.create = async (req, res) => {
-    const message = new Message({
-        forumID: req.body.forumID,
-        messageTitle: req.body.messageTitle,
-        messageText: req.body.messageText,
-        createdBy: req.body._id
-    });
-    message
-    .save()
-    .then((data) => {
-        res.send(data);
-    })
-    .catch((err) => {
-        res.status(500).send({
-            message: err.message || "Die Message konnte nicht erstellt werden."
+exports.getMessages = async (req, res) => {
+    try {
+        const comments = await Message.find();
+        
+        res.status(200).json(comments);
+    } catch (error) {
+        res.status(500).json(error)
+    }
+}
+
+
+
+
+exports.create = async (req,res) =>{
+    const { forumID, messageText} = req.body;
+    const token = req.token;
+    try{
+        const owner = await User.findOne({userID: token.userID});
+
+        const message = await new Message({
+            forumID,
+            messageText,
+            user: owner.userID,
         });
-    });
-};
+        message.user = owner;
+        await message.save();
 
+        res.status(200).json(message);
+    }catch(error){
+        res.status(500).json(error);
+    }
+}
 exports.getByOwnerID = function (req, res, next) {
-    Message.find({messageTitle: req.body.messageTitle})
+    Message.find({forumID: req.body.messageText})
     .then(doc => {
         if(!doc) { return res.status(400).end();}
         return res.status(200).json(doc);
@@ -55,7 +62,7 @@ exports.update = async (req,res) => {
     try {
         const result = await Message.findOneAndUpdate(
             {
-                _id: req.body._id,
+                forumID: req.body._id,
             },
             {
                 messageText: req.body.messageText
@@ -70,14 +77,17 @@ exports.update = async (req,res) => {
         res.status(401).json(err);
     }
   }
-  
-exports.delete = function(req,res){
-    var query = {_id: req.body._id};
 
-    Message.remove(query, function(err, Message){
-        if(err){
-            console.log("Can´t delete: ",err);
-        }
-        res.json(Message);
-    })
-};
+
+exports.delete = async (request, response) => {
+    try {
+        console.log(request.params._id);
+        const comment = await Message.findById(request.params._id);
+        console.log(comment);
+        await comment.delete()
+
+        response.status(200).json(comment,'comment deleted successfully');
+    } catch (error) {
+        response.status(500).json(error)
+    }
+}

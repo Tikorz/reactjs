@@ -13,9 +13,9 @@ router.post("/",verifyToken,MessageService.create);
 
 router.put('/',verifyToken,MessageService.update);
 
-router.post('/getByForumID',verifyToken,MessageService.getByOwnerID);
+router.post('/getByMessageID',verifyToken,MessageService.getByOwnerID);
 
-router.get('/getByForumID',verifyToken,MessageService.getByToken);
+router.get('/getByMessageID',verifyToken,MessageService.getByToken);
 
 router.delete('/', verifyToken,MessageService.delete);
 

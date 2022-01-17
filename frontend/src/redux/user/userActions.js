@@ -9,13 +9,13 @@ import {
     USER_UPDATE_REQUEST,
     USER_UPDATE_SUCCESS,
     USER_UPDATE_FAIL, 
-    USER_GETUSERS_REQUEST,
-    USER_GETUSERS_SUCCESS,
-    USER_GETUSERS_FAIL,
+    USER_LIST_REQUEST,
+    USER_LIST_SUCCESS,
+    USER_LIST_FAIL,
     USER_DELETE_REQUEST,
     USER_DELETE_SUCCESS,
     USER_DELETE_FAIL,
-  } from "../constants/userConstants";
+  } from "./userConstants";
 import axios from 'axios';
 import jwt from 'jsonwebtoken';
 
@@ -60,10 +60,13 @@ export const login = (userID, password) => async (dispatch) => {
           data.isAdministrator = decodedToken.isAdministrator;
           data.userID = decodedToken.userID;
           data._id = decodedToken._id;
+          data.password = decodedToken.password;
           config.userID = data.userID;
+          config.password = data.password;
           config.isAdministrator = data.isAdministrator;
           config.userName = data.userName;
           config._id = data._id;
+          
           
 
           config.token = response.data;
@@ -165,27 +168,26 @@ export const logout = () => async (dispatch) => {
 
   export const getUsers = (user) => async (dispatch, getState) => {
     try {
-      dispatch({ type: USER_GETUSERS_REQUEST });
+      dispatch({ type: USER_LIST_REQUEST });
   
       const {
-        userLogin: { userInfo },
-      } = getState();
-  
+         userLogin: { userInfo },
+        } = getState();
+      
       const config = {
         headers: {
-          "Content-Type": "application/json",
           Authorization: `Bearer ${userInfo.token.token}`,
         },
       };
+      const url = "http://localhost:8080/user/"
+      const { data } = await axios.get(url, config);
   
-      const { data } = await axios.get("http://localhost:8080/user", user, config);
+      dispatch({ type: USER_LIST_SUCCESS, payload: data });
   
-      dispatch({ type: USER_GETUSERS_SUCCESS, payload: data });
-  
-      localStorage.setItem("userInfo", JSON.stringify(data));
+    
     } catch (error) {
       dispatch({
-        type: USER_GETUSERS_FAIL,
+        type: USER_LIST_FAIL,
         payload:
           error.response && error.response.data.message
             ? error.response.data.message
@@ -204,7 +206,7 @@ export const logout = () => async (dispatch) => {
         userLogin: { userInfo },
       } = getState();
   
-      const url = "http://localhost:8080/user/";
+      const url = "http://localhost:8080/user/"+_id;
   
       const config = {
         headers: {

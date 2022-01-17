@@ -1,70 +1,54 @@
 import React, { useState, useEffect } from "react";
-import { Card,Accordion, Button} from "react-bootstrap";
+import { Card, Accordion, Button } from "react-bootstrap";
 import { Link } from "react-router-dom";
+import ReactMarkdown from "react-markdown";
 import MainScreen from "../components/MainScreen";
-import { useSelector, useDispatch } from 'react-redux';
-import { deleteUserAction, updateUser, register} from "../../redux/actions/userActions";
+import { useSelector, useDispatch } from "react-redux";
+import Loading from "../components/Loading";
+import {
+  deleteUserAction /*, updateUser*/ /*, register*/,
+  getUsers,
+} from "../../redux/user/userActions";
 import "./ProfileEdit.css";
 
-import axios from "axios";
-
-import ReactMarkdown from "react-markdown";
+//import axios from "axios";
 
 function UserManagement({ history }) {
- 
   const dispatch = useDispatch();
 
-  
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-
-  const deleteUser = useSelector((state) => state.deleteUser);
-
-  const userRegister = useSelector((state) => state.userRegister);
-
-  const userUpdate = useSelector((state) => state.userUpdate);
-
-
-
-  const [users, setUsers] = useState([]);
-  const api = "http://localhost:8080/user";
-  const token = userInfo.token.token;
+  const userList = useSelector((state) => state.userList);
+  const { loading } = userLogin;
+  const { users } = userList;
 
   useEffect(() => {
-    axios
-      .get(api,{
-        headers: {
-          "Authorization" : `Bearer ${token}`}})      
-      .then((response) => setUsers(response.data));
-  }, []);
+    dispatch(getUsers());
+  }, [dispatch, history]);
 
-  const deleteHandler = (_id) => {
-    if (window.confirm("Are you sure?")) {
-      dispatch(deleteUserAction(_id));
+  useEffect(() => {
+    console.log(userList);
+  }, [userList]);
+
+  const deleteHandler = (id) => {
+    if (window.confirm("Are you sure? you want to delete")) {
+      dispatch(deleteUserAction(id));
     }
   };
 
-  const submitHandler = (e, _id) => {
-    e.preventDefault();
-    dispatch(updateUser(_id));
-  };
-
-  
-  
-
+  console.log(users);
   return (
     <MainScreen title={`List of Users`}>
-       <Link to="/createUser">
+      <Link to="/createUser" id="OpenCreateUserDialogButton">
         <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
           Create new User
         </Button>
       </Link>
-     
+
       {users &&
-        users?.map((users) => (
-          <Accordion>
-            <Card style={{ margin: 10 }} key={users._id}>
-              <Card.Header style={{ display: "flex" }}>
+        users.map((users) => (
+          <Accordion defaultActiveKey="0">
+            <Accordion.Item style={{ margin: 10 }} key={users._id}>
+              <Accordion.Header style={{ display: "flex" }}>
                 <span
                   // onClick={() => ModelShow(note)}
                   style={{
@@ -76,43 +60,38 @@ function UserManagement({ history }) {
                     fontSize: 18,
                   }}
                 >
-                      
-                      {users.userName}               
+                  {users.userID}
                 </span>
                 <div>
-                    <Button to='profileedit' >Edit</Button>
-                    <Button
-                      variant="danger"
-                      className="mx-2"
-                      onClick={() => deleteHandler(users.id)}
-                    >
-                      Delete
-                    </Button>
-                  </div>
-              </Card.Header>
-            
-              <Card.Body>
+                  <Link to="/profileedit">
+                    <Button id="EditButton">Edit</Button>
+                  </Link>
+                  <Button
+                    id="DeleteButton"
+                    variant="danger"
+                    className="mx-2"
+                    onClick={() => deleteHandler(users._id)}
+                  >
+                    Delete
+                  </Button>
+                </div>
+              </Accordion.Header>
+
+              <Accordion.Body>
                 <blockquote className="blockquote mb-0">
-                  <ReactMarkdown>
-                    {users.userName}
-                  </ReactMarkdown>
+                  <ReactMarkdown>{users.userName}</ReactMarkdown>
                   <footer className="blockquote-footer">
-                        ID by user:{" "}
-                        <cite title="Source Title">
-                          
-                          {users._id}
-                          
-                          
-                        </cite>
-                      </footer>
+                    ID by user:<div>{users._id}</div>
+                    UserID:<div>{users.userID}</div>
+                    userName:<div>{users.userName}</div>
+                  </footer>
                 </blockquote>
-              </Card.Body>
-             
-            </Card>
+              </Accordion.Body>
+            </Accordion.Item>
           </Accordion>
         ))}
     </MainScreen>
   );
-};
+}
 
 export default UserManagement;

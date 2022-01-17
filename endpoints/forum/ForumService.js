@@ -6,7 +6,7 @@ const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 
 exports.getForums = async(req,res) =>{
-  const forums = await Forum.find({});
+  const forums = await Forum.find({}).populate('user');
   res.json(forums);
 }
 
@@ -22,7 +22,7 @@ exports.create = async (req, res) => {
   }
   try {
     const owner = await User.findOne({ userID: token.userID });
-    console.log(owner);
+
     if (!forumName || !forumDescription) {
       return res.status(400).send('Not all fields filled in');
     } else {
@@ -30,12 +30,14 @@ exports.create = async (req, res) => {
       const newForum = new Forum({
         forumName,
         forumDescription,
-        user: owner.userID,
+        user: owner.userID, 
       });
       newForum.user = owner;
-      const createdNote = await newForum.save();
+      await newForum.save();
+
+      const note = await Forum.find({}).populate('user');
      
-      return res.status(201).json(createdNote);
+      return res.status(201).json(note);
   
     }
   } catch (err) {

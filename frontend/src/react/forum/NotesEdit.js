@@ -1,33 +1,32 @@
 import React, { useState , useEffect} from "react";
-import { Form, Button, Row, Col} from "react-bootstrap";
-import { Link } from "react-router-dom";
+import { Form, Button, Row, Col } from "react-bootstrap";
+
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
 import { updateUser } from "../../redux/user/userActions";
 
-import "./ProfileEdit.css";
+
 import ErrorMessage from "../components/ErrorMessage";
 
 import Loading from "../components/Loading";
 
-const Profile = ({ history }) => {
+const NotesEdit = ({ history }) => {
   const [userID, setuserID] = useState("");
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
+  const [users, setUsers] = useState([]);
   
 
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo);
 
   const userUpdate = useSelector((state) => state.userUpdate);
   const { loading, error, success } = userUpdate;
 
   useEffect(() => {
-    
     if(!userInfo){
-      history.push("/myProfile")
+      history.push("/notesMe")
     }else{
       setuserID(userInfo.userID)
       setuserName(userInfo.userName)
@@ -36,63 +35,48 @@ const Profile = ({ history }) => {
     
   }, [history,userInfo])
   const submitHandler = (e) => {
-    
+    console.log("anything");
     e.preventDefault();
     dispatch(updateUser({ userID, userName, password }));
     
   };
   return (
-    <MainScreen title="EDIT PROFILE">
+    <MainScreen title="EDIT MyNote">
       <div>
-      {userInfo.isAdministrator ?(
-       
-        <Link id="OpenUserManagament" to="/userManagement">
-        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
-          User Management
-        </Button>
-      </Link>
-      ):(
-        <Link></Link>
-    
-        )}
         <Row className="profileContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
-            {loading && <Loading />}
-              {success && (
-                <ErrorMessage variant="success">
-                  Updated Successfully
-                </ErrorMessage>
-              )}
-              {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
               <Form.Group  controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
+                  id="UserIDInput"
                   type="text"
-                  value={userID}                 
-                  readOnly={userID}
+                  placeholder="Enter userID"
+                  value={users.userID}
+                  onChange={(e) => setuserID(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId="userName">
                 <Form.Label>userName</Form.Label>
                 <Form.Control
+                  id="UserNameInput"
                   type="text"
                   placeholder="Enter userName"
-                  value={userName}
+                  value={users.userName}
                   onChange={(e) => setuserName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Form.Group controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
+                  id="PasswordInput"
                   type="password"
                   placeholder="Enter Password"
-                  value={password}
+                  value={users.password}
                   onChange={(e) => setPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-
-              <Button id="SaveUserButton" type="submit" varient="primary" onClick={submitHandler}>
+              <Button type="submit" varient="primary" onClick={submitHandler}>
                 Update
               </Button>
             </Form>
@@ -104,7 +88,6 @@ const Profile = ({ history }) => {
               justifyContent: "center",
             }}
           >
-            
           </Col>
         </Row>
       </div>
@@ -112,4 +95,4 @@ const Profile = ({ history }) => {
   );
 };
 
-export default Profile;
+export default NotesEdit;

@@ -3,7 +3,7 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from "../../redux/actions/userActions";
+import { register } from "../../redux/user/userActions";
 
 import "./ProfileEdit.css";
 import ErrorMessage from "../components/ErrorMessage";
@@ -62,8 +62,9 @@ const CreateUser = ({ history }) => {
               <Form.Group  controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
+                  id="UserIDInput"
                   type="text"
-                  placeholder="Enter userID"
+                  placeholder="User ID"
                   value={userID}
                   onChange={(e) => setuserID(e.target.value)}
                 ></Form.Control>
@@ -71,8 +72,9 @@ const CreateUser = ({ history }) => {
               <Form.Group controlId="userName">
                 <Form.Label>userName</Form.Label>
                 <Form.Control
+                  id="UserNameInput"
                   type="text"
-                  placeholder="Enter userName"
+                  placeholder="userName"
                   value={userName}
                   onChange={(e) => setuserName(e.target.value)}
                 ></Form.Control>
@@ -80,15 +82,16 @@ const CreateUser = ({ history }) => {
               <Form.Group controlId="password">
                 <Form.Label>Password</Form.Label>
                 <Form.Control
+                  id="PasswordInput"
                   type="password"
-                  placeholder="Enter Password"
+                  placeholder="Password"
                   value={password}
                   onChange={(e) => setPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>
 
-              <Button type="submit"  variant="primary">
-              Create Note
+              <Button id="CreateUserButton" type="submit"  variant="primary">
+              Create User
             </Button>
             <Button className="mx-2" onClick={resetHandler} variant="danger">
               Reset Feilds

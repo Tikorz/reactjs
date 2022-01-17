@@ -26,6 +26,7 @@ app.use(cors(corsConfig));
 // Defining the Middlewares
 
 app.use(bodyParser.urlencoded({ extended: true }))
+//app.use(bodyParser);
 // BodyParser Middleware
 app.use(bodyParser.json());
 

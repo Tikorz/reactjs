@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import MainScreen from "../../react/components/MainScreen";
 import { Button, Card, Form } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
-import { createNoteAction } from "../../redux/actions/noteActions";
+import { createNoteAction } from "../../redux/forum/noteActions";
 
 import ReactMarkdown from "react-markdown";
 

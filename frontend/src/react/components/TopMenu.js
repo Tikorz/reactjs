@@ -1,7 +1,7 @@
 import React from "react";
 import { Navbar, Nav, Container, NavDropdown } from "react-bootstrap";
 import {Link, useHistory} from "react-router-dom";
-import { logout } from "../../redux/actions/userActions";
+import { logout } from "../../redux/user/userActions";
 import { useDispatch, useSelector } from 'react-redux';
 import "./TopMenu.css";
 
@@ -35,7 +35,7 @@ const TopMenu = () => {
                   ):(
                     <Nav.Link href="/register">Register</Nav.Link>
                   )}
-                 
+              
                 
                   {userInfo ? (
       
@@ -47,17 +47,12 @@ const TopMenu = () => {
                       </Link>
                     </NavDropdown.Item>
                     <NavDropdown.Item>
-                      <Link to="/profileedit">
+                      <Link to="/profile">
                         My Profile
                       </Link>
                     </NavDropdown.Item>
-                    <NavDropdown.Item>
-                      
-                      <Link to="/userManagement">
-                        User Management
-                      </Link>
-                      </NavDropdown.Item>
-                    <NavDropdown.Item onClick={logouthandler}>
+                    
+                    <NavDropdown.Item id="LogoutButton" onClick={logouthandler}>
                       Logout
                     </NavDropdown.Item>
                     <NavDropdown.Divider />

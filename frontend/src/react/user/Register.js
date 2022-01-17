@@ -2,7 +2,9 @@ import React, { useState,useEffect } from "react";
 import { Form, Button} from "react-bootstrap";
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from 'react-redux';
-import { register } from '../../redux/actions/userActions';
+import { register } from '../../redux/user/userActions';
+import ErrorMessage from "../components/ErrorMessage";
+import Loading from "../components/Loading";
 
 const Register = ({history}) => {
 
@@ -14,9 +16,7 @@ const Register = ({history}) => {
   const dispatch = useDispatch();
 
   const userRegister = useSelector((state) => state.userRegister);
-  const { userInfo } = userRegister;
-  
-
+  const { loading, error, userInfo } = userRegister;
 
   useEffect(() => {
     
@@ -40,8 +40,8 @@ const Register = ({history}) => {
   
   return <MainScreen title='REGISTER'>
      <div className="loginContainer">
-        {/*{error && <ErrorMessage variant="danger">{error}</ErrorMessage>}*/}
-        {/*{loading && <Loading />}*/}
+        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+        {loading && <Loading />}
         <Form onSubmit={submitHandler}>
           <Form.Group controlId="formBasicuserID">
             <Form.Label>userID</Form.Label>

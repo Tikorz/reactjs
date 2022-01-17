@@ -10,7 +10,7 @@ import { NOTES_UPDATE_REQUEST,
     NOTES_DELETE_SUCCESS,
     NOTES_LIST_FAIL,
     NOTES_LIST_REQUEST,
-    NOTES_LIST_SUCCESS,} from '../constants/notesConstants';
+    NOTES_LIST_SUCCESS,} from './notesConstants';
 
 
 export const noteListReducer = (state = { notes: [] }, action) => {

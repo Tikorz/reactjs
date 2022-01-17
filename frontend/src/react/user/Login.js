@@ -3,10 +3,10 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainScreen from "../components/MainScreen";
 import "./Login.css";
-//import Loading from '../components/Loading';
-//import ErrorMessage from "../components/ErrorMessage";
+import Loading from '../components/Loading';
+import ErrorMessage from "../components/ErrorMessage";
 import { useDispatch, useSelector } from 'react-redux';
-import { login } from '../../redux/actions/userActions';
+import { login } from '../../redux/user/userActions';
 
 const Login = ({ history }) => {
   const [userID, setuserID] = useState("");
@@ -15,7 +15,7 @@ const Login = ({ history }) => {
   const dispatch = useDispatch();
   
   const userLogin = useSelector((state) => state.userLogin);
-  const { /*loading, error,*/ userInfo } = userLogin;
+  const { loading, error, userInfo } = userLogin;
 
   useEffect(() => {
     
@@ -34,8 +34,8 @@ const Login = ({ history }) => {
   return (
     <MainScreen title="LOGIN">
       <div className="loginContainer">
-        {/*error && <ErrorMessage variant="danger">{error}</ErrorMessage>*/}
-        {/*{loading && <Loading /> }*/}
+        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+        {loading && <Loading /> }
         <Form onSubmit={submitHandler}>
           {/*<Form.Group controlId="LoginUserIDInput">*/}
           <Form.Label>userID</Form.Label>

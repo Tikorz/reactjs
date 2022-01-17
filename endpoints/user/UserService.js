@@ -82,7 +82,8 @@ const SECRET_KEY = process.env.TOKEN_KEY;
 
 
 exports.update = async (req,res,next) => {
-
+    const userName = "";
+    const password = "";
   try {
     const salt = await bcrypt.genSalt(10);
     const hashedPassword = await bcrypt.hash(req.body.password, salt);
@@ -95,8 +96,7 @@ exports.update = async (req,res,next) => {
           {
             userName: req.body.userName,
             password: hashedPassword
-          },
-          
+          },   
           {
               upsert: true,
               new: true
@@ -105,6 +105,7 @@ exports.update = async (req,res,next) => {
       res.send(result);
   }catch(err){
       res.status(401).json(err);
+    
   }
 }
 
@@ -129,7 +130,7 @@ exports.getUsers = async (req, res) => {
 };
   
 
-exports.deleteUser = async (req, res) => {
+/*exports.deleteUser = async (req, res) => {
     const user = await User.findById(req.params._id);
   
     if (user.user.toString() !== req.params._id.toString()) {
@@ -144,12 +145,13 @@ exports.deleteUser = async (req, res) => {
       res.status(404);
       throw new Error("User not Found");
     }
-  };
+  };*/
 
   // deleting data of user from the database
 exports.deleteUser = async (request, response) => {
   try{
-      await User.deleteOne({id: request.params.id});
+      await User.findByIdAndDelete({_id: request.params.id});
+      console.log(request.params.id);
       response.status(201).json("User deleted Successfully");
   } catch (error){
       response.status(409).json({ message: error.message});     

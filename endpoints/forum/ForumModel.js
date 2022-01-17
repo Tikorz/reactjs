@@ -15,7 +15,8 @@ const forumSchema = ({
     user: { 
         type: Schema.Types.ObjectId,
         
-        ref: 'user'
+        ref: 'user',
+        
     },
     published_on: {
         type: String,
