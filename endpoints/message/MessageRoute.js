@@ -1,24 +1,20 @@
-var express = require('express');
+var express = require("express");
 var router = express.Router();
-const bcrypt = require('bcrypt');
-const Message = require('./MessageModel');
-var MessageService = require('./MessageService');
-const verifyToken = require('../middleware/verifyToken');
+const bcrypt = require("bcrypt");
+const Message = require("./MessageModel");
+var MessageService = require("./MessageService");
+const verifyToken = require("../middleware/verifyToken");
 
+router.get("/", MessageService.getMessages);
 
+router.post("/", verifyToken, MessageService.create);
 
-router.get('/',MessageService.getMessages)
+router.put("/", verifyToken, MessageService.update);
 
-router.post("/",verifyToken,MessageService.create);
+router.post("/getByMessageID", verifyToken, MessageService.getByOwnerID);
 
-router.put('/',verifyToken,MessageService.update);
+router.get("/getByMessageID", verifyToken, MessageService.getByToken);
 
-router.post('/getByMessageID',verifyToken,MessageService.getByOwnerID);
-
-router.get('/getByMessageID',verifyToken,MessageService.getByToken);
-
-router.delete('/', verifyToken,MessageService.delete);
-
-
+router.delete("/:id", verifyToken, MessageService.delete);
 
 module.exports = router;

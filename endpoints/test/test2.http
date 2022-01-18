@@ -68,6 +68,13 @@ Content-Type: application/json
 ###
 GET http://localhost:8080/forum/
 
+###
+DELETE http://localhost:8080/forum/61e55d8f4308c3e402dacda2
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWU1NWNjZjQzMDhjM2U0MDJkYWNkODQiLCJ1c2VySUQiOiJ0ZXN0dXNlciIsInVzZXJOYW1lIjoidGVzdHVzZXIiLCJpYXQiOjE2NDI1MTI5NTksImV4cCI6MTY0NTEwNDk1OX0.ADHnCREQjYkmi_4tWxmCJw3l58b6jbXBHPZGJa4f0uA
+
+###
+DELETE http://localhost:8080/forumMessage/61e55cdc4308c3e402dacd8d
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWU1NWNjZjQzMDhjM2U0MDJkYWNkODQiLCJ1c2VySUQiOiJ0ZXN0dXNlciIsInVzZXJOYW1lIjoidGVzdHVzZXIiLCJpYXQiOjE2NDI1MTI5NTksImV4cCI6MTY0NTEwNDk1OX0.ADHnCREQjYkmi_4tWxmCJw3l58b6jbXBHPZGJa4f0uA
 
 //Create Forum as 
 ###

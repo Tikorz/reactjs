@@ -1,21 +1,25 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import { Button } from "react-bootstrap";
-
 import { useDispatch, useSelector } from "react-redux";
 import {
   deleteMessageAction,
   listMessage,
   createMessageAction,
+  updateMessageAction
 } from "../../redux/messages/messageActions";
 import Typography from "@material-ui/core/Typography";
 import { TextField } from "@material-ui/core";
 import useStyles from "./styles.js";
+import DeleteIcon from "@mui/icons-material/Delete";
+import IconButton from "@mui/material/IconButton";
+import EditIcon from "@mui/icons-material/Edit";
 
 function Messages({ forum }) {
   console.log(forum);
   const dispatch = useDispatch();
   const classes = useStyles();
   const [message, setMessage] = useState("");
+  const [messageEdit, setMessageEdit] = useState("");
   const messageList = useSelector((state) => state.messageList);
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
@@ -25,14 +29,26 @@ function Messages({ forum }) {
     const finalMessage = `${userInfo.userName}: ${message}`;
     await dispatch(createMessageAction(forum._id, finalMessage));
     dispatch(listMessage());
-    setMessage("");
+    //setMessage("");
   };
 
+  const deleteHandler = (_id) => {
+    if (window.confirm("Are you sure? you want to delete")) {
+      dispatch(deleteMessageAction(_id));
+    }
+  };
+
+  const editHandler = (_id) => {
+      dispatch(updateMessageAction(_id));
+  }
   useEffect(() => {
     dispatch(listMessage());
+    setMessageEdit(messageList.messageText)
   }, []);
 
-  console.log(messages);
+  const submitHandler = (e) =>{
+      e.preventDefault();
+  };
 
   return (
     <div>
@@ -46,7 +62,17 @@ function Messages({ forum }) {
             ?.map((c) => (
               <Typography key={c._id} gutterBottom variant="subtitle1">
                 <strong>{c.messageText} </strong>
+                
+                {c.user === userInfo._id && (
+                    <>
+                <EditIcon onClick={(e) => setMessageEdit(setMessage())}/>
+                <IconButton aria-label="delete">
+                  <DeleteIcon onClick={() => deleteHandler(c._id)} />
+                </IconButton>
+             </>
+                  )}
               </Typography>
+             
             ))}
         </div>
         {userInfo?.userName && (
@@ -54,7 +80,6 @@ function Messages({ forum }) {
             <Typography gutterBottom variant="h6">
               Comments
             </Typography>
-            <Button classname="btn text-end">Edit</Button>
             <TextField
               fullwidth="false"
               rows={4}

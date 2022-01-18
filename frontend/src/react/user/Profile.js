@@ -1,8 +1,8 @@
-import React, { useState , useEffect} from "react";
-import { Form, Button, Row, Col} from "react-bootstrap";
+import React, { useState, useEffect } from "react";
+import { Form, Button, Row, Col } from "react-bootstrap";
 import { Link } from "react-router-dom";
 import MainScreen from "../components/MainScreen";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/user/userActions";
 
 import "./ProfileEdit.css";
@@ -14,7 +14,6 @@ const Profile = ({ history }) => {
   const [userID, setuserID] = useState("");
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
-  
 
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
@@ -25,51 +24,45 @@ const Profile = ({ history }) => {
   const { loading, error, success } = userUpdate;
 
   useEffect(() => {
-    
-    if(!userInfo){
-      history.push("/myProfile")
-    }else{
-      setuserID(userInfo.userID)
-      setuserName(userInfo.userName)
-      setPassword(userInfo.password)
+    if (!userInfo) {
+      history.push("/myProfile");
+    } else {
+      setuserID(userInfo.userID);
+      //setuserName(userInfo.userName);
+      setPassword(userInfo.password);
     }
-    
-  }, [history,userInfo])
+  }, [history, userInfo]);
   const submitHandler = (e) => {
-    
     e.preventDefault();
     dispatch(updateUser({ userID, userName, password }));
-    
   };
   return (
     <MainScreen title="EDIT PROFILE">
       <div>
-      {userInfo.isAdministrator ?(
-       
-        <Link id="OpenUserManagament" to="/userManagement">
-        <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
-          User Management
-        </Button>
-      </Link>
-      ):(
-        <Link></Link>
-    
+        {userInfo.isAdministrator ? (
+          <Link id="OpenUserManagament" to="/userManagement">
+            <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
+              User Management
+            </Button>
+          </Link>
+        ) : (
+          <Link></Link>
         )}
         <Row className="profileContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
-            {loading && <Loading />}
+              {loading && <Loading />}
               {success && (
                 <ErrorMessage variant="success">
                   Updated Successfully
                 </ErrorMessage>
               )}
               {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
-              <Form.Group  controlId="userID">
+              <Form.Group controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
                   type="text"
-                  value={userID}                 
+                  value={userID}
                   readOnly={userID}
                 ></Form.Control>
               </Form.Group>
@@ -78,7 +71,7 @@ const Profile = ({ history }) => {
                 <Form.Control
                   type="text"
                   placeholder="Enter userName"
-                  value={userName}
+                  //value={userName}
                   onChange={(e) => setuserName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
@@ -92,7 +85,12 @@ const Profile = ({ history }) => {
                 ></Form.Control>
               </Form.Group>
 
-              <Button id="SaveUserButton" type="submit" varient="primary" onClick={submitHandler}>
+              <Button
+                id="SaveUserButton"
+                type="submit"
+                varient="primary"
+                onClick={submitHandler}
+              >
                 Update
               </Button>
             </Form>
@@ -103,9 +101,7 @@ const Profile = ({ history }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-          >
-            
-          </Col>
+          ></Col>
         </Row>
       </div>
     </MainScreen>

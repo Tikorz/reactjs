@@ -4,6 +4,7 @@ const express = require('express');
 const router = express.Router();
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
+const ForumModel = require('../forum/ForumModel');
 
 exports.getForums = async(req,res) =>{
   const forums = await Forum.find({}).populate('user');
@@ -100,15 +101,14 @@ exports.getByToken = async (req, res, next) => {
 };
 
 
-exports.delete = function(req,res){
-  var query = {_id: req.body._id};
-
-  Forum.remove(query, function(err, Forum){
-      if(err){
-          console.log("Can´t delete: ",err);
-      }
-      res.json(Forum);
-  })
+exports.delete = async (request,response)=>{
+  try {
+    await Forum.findByIdAndDelete({ _id: request.params.id });
+    console.log(request.params.id);
+    response.status(201).json("Forum deleted Successfully");
+  } catch (error) {
+    response.status(409).json({ message: error.message });
+  }
 };
 
 exports.update = async (req,res) => {

@@ -138,7 +138,7 @@ export const deleteNoteAction = (_id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = "http://localhost:8080/forum/delete";
+    const url = "http://localhost:8080/forum/"+_id;
 
     const config = {
       headers: {
@@ -146,7 +146,7 @@ export const deleteNoteAction = (_id) => async (dispatch, getState) => {
       },
     };
     console.log(userInfo.token.token);
-    const { data } = await axios.delete(url,{_id}, config);
+    const { data } = await axios.delete(url, config);
 
     dispatch({
       type: NOTES_DELETE_SUCCESS,

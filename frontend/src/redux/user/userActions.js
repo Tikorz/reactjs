@@ -53,10 +53,10 @@ export const login = (userID, password) => async (dispatch) => {
           // Login succeeded
           const token = response.data.token;
       
-          //config.token = response.data.token;
+          config.token = response.data.token;
           const decodedToken = jwt.decode(token);
           console.log(decodedToken);
-          data.userName =  decodedToken.userName;
+          //data.userName =  decodedToken.userName;
           data.isAdministrator = decodedToken.isAdministrator;
           data.userID = decodedToken.userID;
           data._id = decodedToken._id;
@@ -64,7 +64,7 @@ export const login = (userID, password) => async (dispatch) => {
           config.userID = data.userID;
           config.password = data.password;
           config.isAdministrator = data.isAdministrator;
-          config.userName = data.userName;
+          //config.userName = data.userName;
           config._id = data._id;
           
           
@@ -77,7 +77,6 @@ export const login = (userID, password) => async (dispatch) => {
        
         
       } catch (error) {
-        //alert("Sorry, login failed");
         dispatch({
             type: USER_LOGIN_FAIL,
             payload:
