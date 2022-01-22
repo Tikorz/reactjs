@@ -12,21 +12,22 @@ function NotesMe({ history, search }) {
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
 
-  const noteList = useSelector((state) => state.noteList);
-  const { notes } = noteList;
-  console.log(noteList);
+   const noteList = useSelector((state) => state.noteList);
+   const { notes } = noteList;
+   console.log(noteList);
 
-  const deleteHandler = (_id) => {
-    if (window.confirm("Are you sure?")) {
-      dispatch(deleteNoteAction(_id));
-    }
-  };
+   const deleteHandler = (_id) => {
+     if (window.confirm("Are you sure?")) {
+       dispatch(deleteNoteAction(_id));
+     }
+   };
 
-  useEffect(() => {
-    dispatch(listForumUser());
-  }, [dispatch]);
+   useEffect(() => {
+     dispatch(listForumUser());
+   }, [dispatch]);
+
   return (
-    <MainScreen title={` ${userInfo.auth.username}´s Forum..`}>
+    <MainScreen title={` ${userInfo.userName}´s Forum..`}>
       <Link to="createForum">
         <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
           Create New Forum
@@ -34,12 +35,11 @@ function NotesMe({ history, search }) {
       </Link>
 
       {notes &&
-        notes?.map((forum) => (
-          <Accordion defaultActiveKey="0">
+        notes.map((forum) => (
+          <Accordion key={forum._id} defaultActiveKey="0">
             <Accordion.Item style={{ margin: 10 }} key={forum._id}>
               <Accordion.Header style={{ display: "flex" }}>
                 <span
-                  // onClick={() => ModelShow(note)}
                   style={{
                     color: "black",
                     textDecoration: "none",

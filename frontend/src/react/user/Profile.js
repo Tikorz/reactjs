@@ -18,18 +18,15 @@ const Profile = ({ history }) => {
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
-  console.log(userInfo);
 
   const userUpdate = useSelector((state) => state.userUpdate);
   const { loading, error, success } = userUpdate;
-
   useEffect(() => {
     if (!userInfo) {
       history.push("/myProfile");
     } else {
       setuserID(userInfo.userID);
-      //setuserName(userInfo.userName);
-      setPassword(userInfo.password);
+      setuserName(userInfo.userName);
     }
   }, [history, userInfo]);
   const submitHandler = (e) => {
@@ -38,7 +35,7 @@ const Profile = ({ history }) => {
   };
   return (
     <MainScreen title="EDIT PROFILE">
-      <div>
+      <div id="PrivatePage">
         {userInfo.isAdministrator ? (
           <Link id="OpenUserManagament" to="/userManagement">
             <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
@@ -71,7 +68,7 @@ const Profile = ({ history }) => {
                 <Form.Control
                   type="text"
                   placeholder="Enter userName"
-                  //value={userName}
+                  value={userName}
                   onChange={(e) => setuserName(e.target.value)}
                 ></Form.Control>
               </Form.Group>

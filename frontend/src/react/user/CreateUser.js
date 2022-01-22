@@ -1,8 +1,8 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { register } from "../../redux/user/userActions";
 
 import "./ProfileEdit.css";
@@ -14,52 +14,46 @@ const CreateUser = ({ history }) => {
   const [userID, setuserID] = useState("");
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
-  
+  const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
-  const { userInfo } = userLogin;
-
-  const userRegister = useSelector((state) => state.userRegister);
-  //const { userInfo } = userRegister;
- 
+  const { userInfo, error, loading } = userLogin;
 
   const resetHandler = () => {
     setuserID("");
     setuserName("");
     setPassword("");
-   
   };
 
-
   useEffect(() => {
-    if(!userInfo){
-      history.push("/userManagement")
-    }else{
-      setuserID(userInfo.userID)
-      setuserName(userInfo.userName)
-      setPassword(userInfo.password)
+    if (!userInfo) {
+      history.push("/userManagement");
+    } else {
+      //setuserID(userInfo.userID);
+      //setuserName(userInfo.userName);
+      //setPassword(userInfo.password);
+      resetHandler();
     }
     
-  }, [history,userInfo])
+  }, [history, userInfo]);
   const submitHandler = (e) => {
-    console.log("User is created");
     e.preventDefault();
     resetHandler();
     dispatch(register(userID, userName, password));
     if (!userID || !userName || !password) return;
-    
-    
+    history.push("/userManagement");
   };
   return (
     <MainScreen title="Create an User">
       <div>
-        <Row className="userCreat">
+        {error && <ErrorMessage variant="danger">{error}</ErrorMessage>}
+        {message && <ErrorMessage variant="danger">{message}</ErrorMessage>}
+        {loading && <Loading />}
+        <Row className="userCreate">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
-              
-
-              <Form.Group  controlId="userID">
+              <Form.Group controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
                   id="UserIDInput"
@@ -90,12 +84,12 @@ const CreateUser = ({ history }) => {
                 ></Form.Control>
               </Form.Group>
 
-              <Button id="CreateUserButton" type="submit"  variant="primary">
-              Create User
-            </Button>
-            <Button className="mx-2" onClick={resetHandler} variant="danger">
-              Reset Feilds
-            </Button>
+              <Button id="CreateUserButton" type="submit" variant="primary">
+                Create User
+              </Button>
+              <Button className="mx-2" onClick={resetHandler} variant="danger">
+                Reset Feilds
+              </Button>
             </Form>
           </Col>
           <Col
@@ -105,7 +99,6 @@ const CreateUser = ({ history }) => {
               justifyContent: "center",
             }}
           >
-            {/*<img src={pic} alt={userID} className="profilePic" />*/}
           </Col>
         </Row>
       </div>

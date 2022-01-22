@@ -25,7 +25,7 @@ router.put('/',verifyToken,UserService.update);
 
 //Delete User
 
-router.delete('/:id',verifyToken,UserService.deleteUser);
+router.delete('/',verifyToken,UserService.deleteUser);
 
 //Get User by ID
 

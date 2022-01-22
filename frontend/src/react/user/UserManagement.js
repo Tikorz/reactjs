@@ -11,6 +11,8 @@ import {
 } from "../../redux/user/userActions";
 import "./ProfileEdit.css";
 
+import UserComponent from "./UserComponent";
+
 //import axios from "axios";
 
 function UserManagement({ history }) {
@@ -25,17 +27,11 @@ function UserManagement({ history }) {
     dispatch(getUsers());
   }, [dispatch, history]);
 
-  useEffect(() => {
-    console.log(userList);
-  }, [userList]);
-
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure? you want to delete")) {
       dispatch(deleteUserAction(id));
     }
   };
-
-  console.log(users);
   return (
     <MainScreen title={`List of Users`}>
       <Link to="/createUser" id="OpenCreateUserDialogButton">
@@ -45,49 +41,10 @@ function UserManagement({ history }) {
       </Link>
 
       {users &&
-        users.map((users) => (
+        users.map((user) => (
+          
           <Accordion defaultActiveKey="0">
-            <Accordion.Item style={{ margin: 10 }} key={users._id}>
-              <Accordion.Header style={{ display: "flex" }}>
-                <span
-                  // onClick={() => ModelShow(note)}
-                  style={{
-                    color: "black",
-                    textDecoration: "none",
-                    flex: 1,
-                    cursor: "pointer",
-                    alignSelf: "center",
-                    fontSize: 18,
-                  }}
-                >
-                  {users.userID}
-                </span>
-                <div>
-                  <Link to="/profileedit">
-                    <Button id="EditButton">Edit</Button>
-                  </Link>
-                  <Button
-                    id="DeleteButton"
-                    variant="danger"
-                    className="mx-2"
-                    onClick={() => deleteHandler(users._id)}
-                  >
-                    Delete
-                  </Button>
-                </div>
-              </Accordion.Header>
-
-              <Accordion.Body>
-                <blockquote className="blockquote mb-0">
-                  <ReactMarkdown>{users.userName}</ReactMarkdown>
-                  <footer className="blockquote-footer">
-                    ID by user:<div>{users._id}</div>
-                    UserID:<div>{users.userID}</div>
-                    userName:<div>{users.userName}</div>
-                  </footer>
-                </blockquote>
-              </Accordion.Body>
-            </Accordion.Item>
+            <UserComponent id={"UserItem" + user.userID} key={user.userID} user={user}/>
           </Accordion>
         ))}
     </MainScreen>

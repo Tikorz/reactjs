@@ -10,18 +10,14 @@ function CreateNote({ history }) {
   const [forumName, setforumName] = useState("");
   const [forumDescription, setforumDescription] = useState("");
 
-
   const dispatch = useDispatch();
 
   const noteCreate = useSelector((state) => state.noteCreate);
-  const {  note } = noteCreate;
-
-  console.log(note);
+  const { note } = noteCreate;
 
   const resetHandler = () => {
     setforumName("");
     setforumDescription("");
-   
   };
 
   const submitHandler = (e) => {
@@ -30,7 +26,7 @@ function CreateNote({ history }) {
     if (!forumName || !forumDescription) return;
 
     resetHandler();
-    history.push("/notesMe");
+    history.push("/forums");
   };
 
   useEffect(() => {}, []);
@@ -41,7 +37,6 @@ function CreateNote({ history }) {
         <Card.Header>Create a new Note</Card.Header>
         <Card.Body>
           <Form onSubmit={submitHandler}>
-           
             <Form.Group controlId="forumName">
               <Form.Label>forumName</Form.Label>
               <Form.Control
@@ -71,7 +66,6 @@ function CreateNote({ history }) {
               </Card>
             )}
 
-            
             <Button type="submit" variant="primary">
               Create Note
             </Button>

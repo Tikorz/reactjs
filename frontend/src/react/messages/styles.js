@@ -17,7 +17,8 @@ export default makeStyles((theme) => ({
   },
   messagesInnerContainer: {
     height: "200px",
-    marginRight: "30px",
+    marginRight: "20px",
     overflowY: "scroll",
+    width: "500px"
   },
 }));

@@ -53,35 +53,30 @@ exports.create = async (req, res) => {
 exports.getByOwnerID = async (req, res, next) => {
 
   // Als erstes verifizieren, dass es sich um den admin handelt
+  const users = await User.findOne({_id: req.token._id});
   const requestingUser = req.token.userID;
   console.log('Requesting user: ', requestingUser);
   if(requestingUser !== 'admin') {
     return res.status(401).send('Only admin may use this route');
   }
-
   // Benutzernamen aus dem request lesen
   const { ownerID } = req.body;
-
   // Diesen Benutzer aus der DB ziehen
   const owner = await User.findOne({ userID: ownerID });
   if(!owner) {
-  
     return res.status(404).send('Owner not found');
   }
-
   // Alle Foren dieses Users finden
-  const forums = await Forum.find({ user: owner });
-
+  const forums = await Forum.find({ user: owner, users: user });
   if(forums) {
     return res.json(forums);
   } else {
     return res.status(404).json({ message: "No forums found for this user" }); 
   }
-
 };
 
 
-exports.getByToken = async (req, res, next) => {
+exports.getByOwnerID = async (req, res, next) => {
   // User-Objekt aus der DB holen
   const user = await User.findOne({ _id: req.token._id });
   // Wenn der User nicht gefunden wird, Fehler senden

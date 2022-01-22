@@ -3,6 +3,7 @@ import { Accordion, Button } from "react-bootstrap";
 import MainScreen from "../components/MainScreen";
 import ReactMarkdown from "react-markdown";
 import { useDispatch, useSelector } from "react-redux";
+import { Link } from "react-router-dom";
 import Messages from "../messages/Messages";
 import SendIcon from "@mui/icons-material/Send";
 import "./Notes.css";
@@ -15,20 +16,28 @@ function Notes({ history, search }) {
   const { userInfo } = userLogin;
 
   const noteList = useSelector((state) => state.noteList);
+  console.log("notelist", noteList);
   const { notes } = noteList;
-  console.log(noteList);
 
   useEffect(() => {
     dispatch(listForum());
   }, [dispatch, history]);
 
-  console.log(notes);
-
   return (
     <MainScreen title={`List of Forum`}>
+      {userInfo? (
+        <Link to="createForum">
+          <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
+            Create New Forum
+          </Button>
+        </Link>
+      ) : (
+        <Link></Link>
+      )}
+
       {notes &&
         notes?.map((forum) => (
-          <Accordion defaultActiveKey="0">
+          <Accordion key={forum._id} defaultActiveKey="0">
             <Accordion.Item style={{ margin: 10 }} key={forum._id}>
               <Accordion.Header style={{ display: "flex" }}>
                 <span
@@ -48,8 +57,9 @@ function Notes({ history, search }) {
                 <blockquote className="blockquote mb-0">
                   <ReactMarkdown>{forum.forumDescription}</ReactMarkdown>
                   <footer className="blockquote-footer">
-                    Created by:{forum.user?.userName}
-                    Created on:{forum.published_on.substring(0, 300)}
+                    Created by:{` ${forum.ownerID}`}
+                    {` `}
+                    Created on:{` ${forum.createdAt}`}
                   </footer>
                 </blockquote>
                 <div className="messages">

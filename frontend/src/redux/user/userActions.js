@@ -1,110 +1,103 @@
-import { 
-    USER_LOGIN_SUCCESS, 
-    USER_LOGIN_REQUEST, 
-    USER_LOGIN_FAIL, 
-    USER_LOGOUT, 
-    USER_REGISTER_SUCCESS, 
-    USER_REGISTER_FAIL, 
-    USER_REGISTER_REQUEST,
-    USER_UPDATE_REQUEST,
-    USER_UPDATE_SUCCESS,
-    USER_UPDATE_FAIL, 
-    USER_LIST_REQUEST,
-    USER_LIST_SUCCESS,
-    USER_LIST_FAIL,
-    USER_DELETE_REQUEST,
-    USER_DELETE_SUCCESS,
-    USER_DELETE_FAIL,
-  } from "./userConstants";
-import axios from 'axios';
-import jwt from 'jsonwebtoken';
-
-
+import {
+  USER_LOGIN_SUCCESS,
+  USER_LOGIN_REQUEST,
+  USER_LOGIN_FAIL,
+  USER_LOGOUT,
+  USER_REGISTER_SUCCESS,
+  USER_REGISTER_FAIL,
+  USER_REGISTER_REQUEST,
+  USER_UPDATE_REQUEST,
+  USER_UPDATE_SUCCESS,
+  USER_UPDATE_FAIL,
+  USER_LIST_REQUEST,
+  USER_LIST_SUCCESS,
+  USER_LIST_FAIL,
+  USER_DELETE_REQUEST,
+  USER_DELETE_SUCCESS,
+  USER_DELETE_FAIL,
+} from "./userConstants";
+import axios from "axios";
+import jwt from "jsonwebtoken";
+import { createNoteAction } from "../forum/noteActions";
 
 export const login = (userID, password) => async (dispatch) => {
-    try {
-        dispatch({ type: USER_LOGIN_REQUEST });
-       
-        
-        const url = "http://localhost:8080/authenticate/";
-        
-        const config = {
-          auth: {
-            username: userID,
-            password,
+  try {
+    dispatch({ type: USER_LOGIN_REQUEST });
 
-          },
-        };
-    
-        const data = {};
-        const response = await axios.post(
-            url, 
-            data, 
-            config,
-            
-        )
-
-
-        dispatch({ type: USER_LOGIN_SUCCESS, payload: config});
-        
-        
-       
-        if (response.status === 200) {
-          // Login succeeded
-          const token = response.data.token;
-      
-          config.token = response.data.token;
-          const decodedToken = jwt.decode(token);
-          console.log(decodedToken);
-          //data.userName =  decodedToken.userName;
-          data.isAdministrator = decodedToken.isAdministrator;
-          data.userID = decodedToken.userID;
-          data._id = decodedToken._id;
-          data.password = decodedToken.password;
-          config.userID = data.userID;
-          config.password = data.password;
-          config.isAdministrator = data.isAdministrator;
-          //config.userName = data.userName;
-          config._id = data._id;
-          
-          
-
-          config.token = response.data;
-
-        }
-        localStorage.setItem("userInfo", JSON.stringify(config));
-        
-       
-        
-      } catch (error) {
-        dispatch({
-            type: USER_LOGIN_FAIL,
-            payload:
-                error.response && error.response.data.ErrorMessage
-                    ? error.response.data.ErrorMessage
-                    : error.message,
-        });
+    const url = "http://localhost:8080/authenticate/";
+    const response = await axios.post(
+      url,
+      {
+        withCredentials: true,
+        headers: {
+          Accept: "application/json",
+          "Content-Type": "application/json",
+        },
+      },
+      {
+        auth: {
+          username: userID,
+          password,
+        },
       }
+    );
+
+    const config = {
+      auth: {
+        username: userID,
+        password,
+      },
+    };
+
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: config });
+
+    if (response.status === 200) {
+      const bearerToken = response.headers.authorization;
+      const tokenRegex = /Bearer (.*)/;
+      const match = bearerToken.match(tokenRegex);
+      const authToken = match[1];
+
+      const decodedToken = jwt.decode(authToken);
+
+      config.userID = decodedToken.userID;
+      config.isAdministrator = decodedToken.isAdministrator;
+      config.userName = decodedToken.userName;
+      config._id = decodedToken._id;
+      console.log(decodedToken);
+      delete config.auth;
+      config.token = authToken;
+      localStorage.setItem("userInfo", JSON.stringify(config));
+    }
+  } catch (error) {
+    dispatch({
+      type: USER_LOGIN_FAIL,
+      payload:
+        error.response && error.response.data.ErrorMessage
+          ? error.response.data.ErrorMessage
+          : error.message,
+    });
+  }
 };
 
 export const logout = () => async (dispatch) => {
-    localStorage.removeItem("userInfo");
-    dispatch({ type: USER_LOGOUT });
-  };
+  localStorage.removeItem("userInfo");
+  dispatch({ type: USER_LOGOUT });
+};
 
-
-
-  export const register =
+export const register =
   (userID, userName, password) => async (dispatch, getState) => {
     try {
       dispatch({
         type: USER_REGISTER_REQUEST,
       });
-
+      const {
+        userLogin: { userInfo },
+      } = getState();
 
       const config = {
         headers: {
           "Content-Type": "application/json",
+          Authorization: `Bearer ${userInfo.token}`,
         },
       };
       const url = "http://localhost:8080/user/";
@@ -131,102 +124,105 @@ export const logout = () => async (dispatch) => {
     }
   };
 
+export const updateUser = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_UPDATE_REQUEST });
 
-  export const updateUser = (user) => async (dispatch, getState) => {
-    try {
-      dispatch({ type: USER_UPDATE_REQUEST });
-  
-      const {
-        userLogin: { userInfo },
-      } = getState();
-      
-      const config = {
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token.token}`,
-        },
-      };
-      console.log(user);
-      const { data } = await axios.put("http://localhost:8080/user/", user, config);
-  
-      dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
-  
-      dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
-  
-      
-    } catch (error) {
-      dispatch({
-        type: USER_UPDATE_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-  export const getUsers = (user) => async (dispatch, getState) => {
-    try {
-      dispatch({ type: USER_LIST_REQUEST });
-  
-      const {
-         userLogin: { userInfo },
-        } = getState();
-      
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token.token}`,
-        },
-      };
-      const url = "http://localhost:8080/user/"
-      const { data } = await axios.get(url, config);
-  
-      dispatch({ type: USER_LIST_SUCCESS, payload: data });
-  
-    
-    } catch (error) {
-      dispatch({
-        type: USER_LIST_FAIL,
-        payload:
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message,
-      });
-    }
-  };
+    const config = {
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.put(
+      "http://localhost:8080/user/",
+      user,
+      config
+    );
 
-  export const deleteUserAction = (_id) => async (dispatch, getState) => {
-    try {
-      dispatch({
-        type: USER_DELETE_REQUEST,
-      });
-  
-      const {
-        userLogin: { userInfo },
-      } = getState();
-  
-      const url = "http://localhost:8080/user/"+_id;
-  
-      const config = {
-        headers: {
-          Authorization: `Bearer ${userInfo.token.token}`,
-        },
-      };
-      console.log(userInfo.token.token);
-      const { data } = await axios.delete(url, config);
-  
-      dispatch({
-        type: USER_DELETE_SUCCESS,
-        payload: data,
-      });
-    } catch (error) {
-      const message =
+    dispatch({ type: USER_UPDATE_SUCCESS, payload: data });
+
+    dispatch({ type: USER_LOGIN_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_UPDATE_FAIL,
+      payload:
         error.response && error.response.data.message
           ? error.response.data.message
-          : error.message;
-      dispatch({
-        type: USER_DELETE_FAIL,
-        payload: message,
-      });
-    }
-  };
+          : error.message,
+    });
+  }
+};
+
+export const getUsers = (user) => async (dispatch, getState) => {
+  try {
+    dispatch({ type: USER_LIST_REQUEST });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const url = "http://localhost:8080/user/";
+    const { data } = await axios.get(url, config);
+
+    dispatch({ type: USER_LIST_SUCCESS, payload: data });
+  } catch (error) {
+    dispatch({
+      type: USER_LIST_FAIL,
+      payload:
+        error.response && error.response.data.message
+          ? error.response.data.message
+          : error.message,
+    });
+  }
+};
+
+export const deleteUserAction = (deleteeID) => async (dispatch, getState) => {
+  try {
+    dispatch({
+      type: USER_DELETE_REQUEST,
+    });
+
+    const {
+      userLogin: { userInfo },
+    } = getState();
+
+    const url = "http://localhost:8080/user/";
+
+    console.log(deleteeID);
+
+    const config = {
+      data: {
+        userID: deleteeID,
+      },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization: `Bearer ${userInfo.token}`,
+      },
+    };
+    const { data } = await axios.delete(url, config);
+
+    dispatch({
+      type: USER_DELETE_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: USER_DELETE_FAIL,
+      payload: message,
+    });
+  }
+};

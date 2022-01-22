@@ -22,14 +22,12 @@ export const listForum = () => async (dispatch) => {
 
     const config = {
       headers: {
-        "Content-Type": "application/json"
-      }
-    }
+        "Content-Type": "application/json",
+      },
+    };
     const url = "http://localhost:8080/forum/";
 
-  
-    const {data} = await axios.get(url, config);
-
+    const { data } = await axios.get(url, config);
 
     dispatch({
       type: NOTES_LIST_SUCCESS,
@@ -49,43 +47,41 @@ export const listForum = () => async (dispatch) => {
 };
 
 export const listForumUser = () => async (dispatch, getState) => {
-    try {
-        dispatch({
-          type: NOTES_LIST_REQUEST,
-        });
-    
-        const {
-          userLogin: { userInfo },
-        } = getState();
-    
-        const config = {
-          headers: {
-            Authorization: `Bearer ${userInfo.token.token}`,
-          },
-        };
+  try {
+    dispatch({
+      type: NOTES_LIST_REQUEST,
+    });
 
-       
-        const url = "http://localhost:8080/forum/getByToken";
-        
-        const {data}= await axios.get(url, config);
+    const {
+      userLogin: { userInfo },
+    } = getState();
 
-    
-        dispatch({
-          type: NOTES_LIST_SUCCESS,
-          payload: data,
-        });
-      
-      } catch (error) {
-        const message =
-          error.response && error.response.data.message
-            ? error.response.data.message
-            : error.message;
-        dispatch({
-          type: NOTES_LIST_FAIL,
-          payload: message,
-        });
-      }
+    const config = {
+      headers: {
+        Authorization: `Bearer ${userInfo.token.token}`,
+      },
+    };
+
+    const url = "http://localhost:8080/forum/getByOwnerID";
+
+    const { data } = await axios.get(url, config);
+
+    dispatch({
+      type: NOTES_LIST_SUCCESS,
+      payload: data,
+    });
+  } catch (error) {
+    const message =
+      error.response && error.response.data.message
+        ? error.response.data.message
+        : error.message;
+    dispatch({
+      type: NOTES_LIST_FAIL,
+      payload: message,
+    });
+  }
 };
+
 
 export const createNoteAction =
   (forumName, forumDescription) => async (dispatch, getState) => {
@@ -101,7 +97,7 @@ export const createNoteAction =
       const config = {
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${userInfo.token.token}`,
+          Authorization: `Bearer ${userInfo.token}`,
         },
       };
       const url = "http://localhost:8080/forum/";
@@ -138,14 +134,13 @@ export const deleteNoteAction = (_id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = "http://localhost:8080/forum/"+_id;
+    const url = "http://localhost:8080/forum/" + _id;
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token.token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
-    console.log(userInfo.token.token);
     const { data } = await axios.delete(url, config);
 
     dispatch({

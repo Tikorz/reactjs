@@ -68,9 +68,12 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhY
 Content-Type: application/json
 
 {
-    "ownerID" : "manfred"
+    "ownerID" : "testuser2"
 }
 
+###
+https://localhost/forum/getByOwnerID
+Authorization: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhZG1pbiIsImlzQWRtaW5pc3RyYXRvciI6dHJ1ZSwidXNlck5hbWUiOiJEZWZhdWx0IEFkbWluaXN0cmF0b3IgQWNjb3VudCIsImV4cGlyZXMiOjE2NDI3MDEzNTA1MjEsImlhdCI6MTY0MjcwMTA1MH0.cq8oBcu3dtk3XmjM-WRlEs9kUoQvr1S2XLUB16l3Y_s
 ###
 POST https://localhost:443/forumMessage/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MThiYWFiNzk1NGJmMmU1MWJmMzRhNjMiLCJ1c2VySUQiOiJhZG1pbiIsImlhdCI6MTYzNjYyNDg1OX0.uahqCD7WHP3XFiF0GV_1WlsKthr5YRqN3F8Pn2dV_RI

@@ -31,13 +31,17 @@ Authorization: Basic YWRtaW46MTIz
 // Login mit Basic Authentication mit falschem Credentials
 ###
 POST http://localhost:8080/authenticate/
-Authorization: Basic admin:123
+Authorization: Basic manfred:123
 
 
 ###
-DELETE http://localhost:8080/user/61dd8e2e9dddda1628299723
+DELETE http://localhost:8080/user/
 Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MDY4MDM0OSwiZXhwIjoxNjQzMjcyMzQ5fQ.4DAOoqM6F17GNbyWg5G6jwnW9RCyRS99OnUfiPygWB4
+Content-Type: application/json
 
+{
+    "userID": "testuser"
+}
 
 //list all Users without Token (should give an error)
 ###
@@ -50,14 +54,13 @@ Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhY
 
 ###
 PUT http://localhost:8080/user/
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJfaWQiOiI2MWIzOGNhYzUxNjFjNjdlMzM0OTA3YmMiLCJ1c2VySUQiOiJhZG1pbiIsInVzZXJOYW1lIjoiYWRtaW4iLCJpc0FkbWluaXN0cmF0b3IiOnRydWUsImlhdCI6MTY0MTMzODU4MywiZXhwIjoxNjQzOTMwNTgzfQ.0DWqhN_AkJ6cx1TauNPKOjD8Uq-XXXFdBdaOm7NBwJA
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VySUQiOiJhZG1pbiIsImlzQWRtaW5pc3RyYXRvciI6dHJ1ZSwidXNlck5hbWUiOiJEZWZhdWx0IEFkbWluaXN0cmF0b3IgQWNjb3VudCIsImV4cGlyZXMiOjE2NDI2NzE4MTA1NjAsImlhdCI6MTY0MjY3MTUxMH0.Yqwu9FBvKu019SFsqNEKgqwW_aUK61HMWwVtVVvCcnY
 Content-Type: application/json
 
 {
 
      "userID": "manfred",
-    "userName": "manfred12",
-   "password": "123"
+    "isAdministrator": true
     
     
 

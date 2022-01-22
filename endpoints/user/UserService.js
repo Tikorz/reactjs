@@ -122,27 +122,11 @@ exports.getUsers = async (req, res) => {
   }
 };
 
-/*exports.deleteUser = async (req, res) => {
-    const user = await User.findById(req.params._id);
-  
-    if (user.user.toString() !== req.params._id.toString()) {
-      res.status(401);
-      throw new Error("You can't perform this action");
-    }
-  
-    if (user) {
-      await userremove();
-      res.json({ message: "User Removed" });
-    } else {
-      res.status(404);
-      throw new Error("User not Found");
-    }
-  };*/
 
 // deleting data of user from the database
 exports.deleteUser = async (request, response) => {
   try {
-    await User.findByIdAndDelete({ _id: request.params.id });
+    await User.findBy({ userID: request.body.userID });
     console.log(request.params.id);
     response.status(201).json("User deleted Successfully");
   } catch (error) {

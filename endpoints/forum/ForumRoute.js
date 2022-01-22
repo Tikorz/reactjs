@@ -22,7 +22,7 @@ router.put('/',verifyToken,ForumService.update);
 router.delete('/:id', verifyToken,ForumService.delete);
 
 //Get Forum by Token
-router.get('/getByToken',verifyToken,ForumService.getByToken);
+router.get('/getByOwnerID',verifyToken,ForumService.getByToken);
 
 //Get Forum by ID
 

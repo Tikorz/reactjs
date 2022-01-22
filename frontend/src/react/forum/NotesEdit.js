@@ -1,10 +1,9 @@
-import React, { useState , useEffect} from "react";
+import React, { useState, useEffect } from "react";
 import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
-import { useDispatch, useSelector } from 'react-redux';
+import { useDispatch, useSelector } from "react-redux";
 import { updateUser } from "../../redux/user/userActions";
-
 
 import ErrorMessage from "../components/ErrorMessage";
 
@@ -15,7 +14,6 @@ const NotesEdit = ({ history }) => {
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
   const [users, setUsers] = useState([]);
-  
 
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
@@ -25,20 +23,17 @@ const NotesEdit = ({ history }) => {
   const { loading, error, success } = userUpdate;
 
   useEffect(() => {
-    if(!userInfo){
-      history.push("/notesMe")
-    }else{
-      setuserID(userInfo.userID)
-      setuserName(userInfo.userName)
-      setPassword(userInfo.password)
+    if (!userInfo) {
+      history.push("/notesMe");
+    } else {
+      setuserID(userInfo.userID);
+      setuserName(userInfo.userName);
+      setPassword(userInfo.password);
     }
-    
-  }, [history,userInfo])
+  }, [history, userInfo]);
   const submitHandler = (e) => {
-    console.log("anything");
     e.preventDefault();
     dispatch(updateUser({ userID, userName, password }));
-    
   };
   return (
     <MainScreen title="EDIT MyNote">
@@ -46,7 +41,7 @@ const NotesEdit = ({ history }) => {
         <Row className="profileContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
-              <Form.Group  controlId="userID">
+              <Form.Group controlId="userID">
                 <Form.Label>userID</Form.Label>
                 <Form.Control
                   id="UserIDInput"
@@ -87,8 +82,7 @@ const NotesEdit = ({ history }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-          >
-          </Col>
+          ></Col>
         </Row>
       </div>
     </MainScreen>

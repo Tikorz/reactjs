@@ -65,6 +65,7 @@ exports.update = async (req, res) => {
         forumID: req.body._id,
       },
       {
+        messageTitle: req.body.messageTitle,
         messageText: req.body.messageText,
       },
       {

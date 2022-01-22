@@ -30,7 +30,7 @@ exports.register = async (req,res) =>{
      const savedUser = await users.save();
      res.send(savedUser);
    }catch(err){
-     res.status(400).send(err);
+     return res.status(400).send(err);
    }
 }
 
@@ -39,13 +39,14 @@ exports.login = async (req,res) =>{
   const b64auth = (req.headers.authorization || '').split(' ')[1] || '';
   const [userID, password] = Buffer.from(b64auth, 'base64').toString().split(':');
   const user = await User.findOne({ userID: userID });
+  const _id = user._id;
   const userName = user.userName;
   const isAdministrator = user.isAdministrator;
   if(!user) return res.status(400).send('User not found');
   const validPass = await bcrypt.compare(password, user.password);
   if(!validPass) return res.status(400).send('Incorrect Password');
 
-  const token = generateToken(user._id, userID,userName,isAdministrator);
+  const token = generateToken(_id, userID,userName,isAdministrator);
   
   return res.header('Authorization', 'Bearer ' + token).json({ token });
 }
