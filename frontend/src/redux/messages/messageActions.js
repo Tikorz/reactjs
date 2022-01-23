@@ -108,7 +108,6 @@ export const deleteMessageAction = (id) => async (dispatch, getState) => {
         _id: id,
       },
     });
-    console.log(data);
     dispatch({
       type: MESSAGE_DELETE_SUCCESS,
       payload: data,
@@ -126,7 +125,7 @@ export const deleteMessageAction = (id) => async (dispatch, getState) => {
 };
 
 export const updateMessageAction =
-  (messageID, messageTitle, messageText) => async (dispatch, getState) => {
+  (messageID, messageText) => async (dispatch, getState) => {
     try {
       dispatch({
         type: MESSAGE_UPDATE_REQUEST,
@@ -144,7 +143,11 @@ export const updateMessageAction =
         },
       };
 
-      const { data } = await axios.put(url, { messageID, messageTitle, messageText }, config);
+      const { data } = await axios.put(
+        url,
+        { _id: messageID, messageText },
+        config
+      );
 
       dispatch({
         type: MESSAGE_UPDATE_SUCCESS,

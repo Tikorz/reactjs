@@ -58,7 +58,7 @@ export const listForumUser = () => async (dispatch, getState) => {
 
     const config = {
       headers: {
-        Authorization: `Bearer ${userInfo.token.token}`,
+        Authorization: `Bearer ${userInfo.token}`,
       },
     };
 
@@ -82,7 +82,6 @@ export const listForumUser = () => async (dispatch, getState) => {
   }
 };
 
-
 export const createNoteAction =
   (forumName, forumDescription) => async (dispatch, getState) => {
     try {
@@ -100,7 +99,7 @@ export const createNoteAction =
           Authorization: `Bearer ${userInfo.token}`,
         },
       };
-      const url = "http://localhost:8080/forum/";
+      const url = "http://localhost:433/forum/";
 
       const { data } = await axios.post(
         url,
@@ -134,14 +133,16 @@ export const deleteNoteAction = (_id) => async (dispatch, getState) => {
       userLogin: { userInfo },
     } = getState();
 
-    const url = "http://localhost:8080/forum/" + _id;
+    const url = "http://localhost:8080/forum/";
 
-    const config = {
+    const { data } = await axios.delete(url, {
       headers: {
         Authorization: `Bearer ${userInfo.token}`,
       },
-    };
-    const { data } = await axios.delete(url, config);
+      data: {
+        _id,
+      },
+    });
 
     dispatch({
       type: NOTES_DELETE_SUCCESS,

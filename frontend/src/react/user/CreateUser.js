@@ -14,6 +14,7 @@ const CreateUser = ({ history }) => {
   const [userID, setuserID] = useState("");
   const [userName, setuserName] = useState("");
   const [password, setPassword] = useState("");
+  const [isAdministrator, setisAdministrator] = useState("");
   const [message, setMessage] = useState(null);
 
   const dispatch = useDispatch();
@@ -24,23 +25,20 @@ const CreateUser = ({ history }) => {
     setuserID("");
     setuserName("");
     setPassword("");
+    setisAdministrator("");
   };
 
   useEffect(() => {
     if (!userInfo) {
       history.push("/userManagement");
     } else {
-      //setuserID(userInfo.userID);
-      //setuserName(userInfo.userName);
-      //setPassword(userInfo.password);
       resetHandler();
     }
-    
   }, [history, userInfo]);
   const submitHandler = (e) => {
     e.preventDefault();
     resetHandler();
-    dispatch(register(userID, userName, password));
+    dispatch(register(userID, userName, password, isAdministrator));
     if (!userID || !userName || !password) return;
     history.push("/userManagement");
   };
@@ -83,6 +81,16 @@ const CreateUser = ({ history }) => {
                   onChange={(e) => setPassword(e.target.value)}
                 ></Form.Control>
               </Form.Group>
+              <Form.Group controlId="isAdministrator">
+                <Form.Label>isAdministrator</Form.Label>
+                <Form.Control
+                  id="isAdministratorInput"
+                  type="boolean"
+                  placeholder="isAdministrator"
+                  value={isAdministrator}
+                  onChange={(e) => setisAdministrator(e.target.value)}
+                ></Form.Control>
+              </Form.Group>
 
               <Button id="CreateUserButton" type="submit" variant="primary">
                 Create User
@@ -98,8 +106,7 @@ const CreateUser = ({ history }) => {
               alignItems: "center",
               justifyContent: "center",
             }}
-          >
-          </Col>
+          ></Col>
         </Row>
       </div>
     </MainScreen>

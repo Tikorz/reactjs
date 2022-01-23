@@ -16,6 +16,7 @@ import ProfileEdit from "./react/user/ProfileEdit";
 import UserManagement from "./react/user/UserManagement";
 import CreateUser from "./react/user/CreateUser";
 import Messages from "./react/messages/Messages";
+import Forum from "./react/forum/Forum";
 
 function App() {
   const [search, setSearch] = useState("");
@@ -41,6 +42,8 @@ function App() {
         <Route path="/createUser" component={CreateUser} exact />
         <Route path="/createForum" component={CreateNote} exact />
         <Route path="/messages" component={Messages} exact />
+
+        <Route path="/forum" component={Forum} exact />
       </main>
       <Footer />
     </BrowserRouter>
@@ -48,3 +51,5 @@ function App() {
 }
 
 export default App;
+
+

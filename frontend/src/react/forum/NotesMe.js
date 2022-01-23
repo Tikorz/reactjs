@@ -73,8 +73,8 @@ function NotesMe({ history, search }) {
                   <footer className="blockquote-footer">
                     Created on{" "}
                     <cite title="Source Title">
-                      {forum.published_on.substring(0, 300)}
-                      {forum.user.userName}
+                      {/* {forum.published_on && forum.published_on.substring(0, 300)} */}
+                      {/* {forum.user.userName && forum.user.userName} */}
                     </cite>
                   </footer>
                 </blockquote>

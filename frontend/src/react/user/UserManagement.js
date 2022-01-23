@@ -30,6 +30,7 @@ function UserManagement({ history }) {
   const deleteHandler = (id) => {
     if (window.confirm("Are you sure? you want to delete")) {
       dispatch(deleteUserAction(id));
+      dispatch(getUsers());
     }
   };
   return (
@@ -42,9 +43,12 @@ function UserManagement({ history }) {
 
       {users &&
         users.map((user) => (
-          
           <Accordion defaultActiveKey="0">
-            <UserComponent id={"UserItem" + user.userID} key={user.userID} user={user}/>
+            <UserComponent
+              id={"UserItem" + user.userID}
+              key={user.userID}
+              user={user}
+            />
           </Accordion>
         ))}
     </MainScreen>

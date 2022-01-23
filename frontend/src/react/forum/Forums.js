@@ -7,6 +7,8 @@ import { Link } from "react-router-dom";
 import Messages from "../messages/Messages";
 import SendIcon from "@mui/icons-material/Send";
 import "./Notes.css";
+import List from "@mui/material/List";
+import ListItem from "@mui/material/ListItem";
 import { listForum } from "../../redux/forum/noteActions";
 
 function Notes({ history, search }) {
@@ -16,7 +18,6 @@ function Notes({ history, search }) {
   const { userInfo } = userLogin;
 
   const noteList = useSelector((state) => state.noteList);
-  console.log("notelist", noteList);
   const { notes } = noteList;
 
   useEffect(() => {
@@ -25,7 +26,7 @@ function Notes({ history, search }) {
 
   return (
     <MainScreen title={`List of Forum`}>
-      {userInfo? (
+      {userInfo ? (
         <Link to="createForum">
           <Button style={{ marginLeft: 10, marginBottom: 6 }} size="lg">
             Create New Forum
@@ -34,41 +35,34 @@ function Notes({ history, search }) {
       ) : (
         <Link></Link>
       )}
-
-      {notes &&
-        notes?.map((forum) => (
-          <Accordion key={forum._id} defaultActiveKey="0">
-            <Accordion.Item style={{ margin: 10 }} key={forum._id}>
-              <Accordion.Header style={{ display: "flex" }}>
-                <span
-                  style={{
-                    color: "black",
-                    textDecoration: "none",
-                    flex: 1,
-                    cursor: "pointer",
-                    alignSelf: "center",
-                    fontSize: 18,
-                  }}
-                >
-                  {forum.forumName}
-                </span>
-              </Accordion.Header>
-              <Accordion.Body>
-                <blockquote className="blockquote mb-0">
-                  <ReactMarkdown>{forum.forumDescription}</ReactMarkdown>
-                  <footer className="blockquote-footer">
-                    Created by:{` ${forum.ownerID}`}
-                    {` `}
-                    Created on:{` ${forum.createdAt}`}
-                  </footer>
-                </blockquote>
-                <div className="messages">
-                  <Messages forum={forum} />
-                </div>
-              </Accordion.Body>
-            </Accordion.Item>
-          </Accordion>
-        ))}
+      <List>
+        {notes &&
+          notes?.map((forum) => (
+            <Link
+              to={{
+                pathname: `/forum`,
+                state: { forum },
+              }}
+            >
+              <ListItem
+                classname="list-item"
+                style={{
+                  width: "100%",
+                  background: "white",
+                  padding: "12px",
+                  border: "solid",
+                  borderWidth: "2px",
+                  textDecoration: "none",
+                  marginTop: "5px",
+                  marginBottom: "5px",
+                }}
+              >
+                {" "}
+                {forum.forumName}
+              </ListItem>
+            </Link>
+          ))}
+      </List>
     </MainScreen>
   );
 }

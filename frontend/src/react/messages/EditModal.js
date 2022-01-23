@@ -3,9 +3,8 @@ import Box from "@mui/material/Box";
 import Modal from "@mui/material/Modal";
 import { useDispatch, useSelector } from "react-redux";
 import {
- 
   updateMessageAction,
-  listMessage
+  listMessage,
 } from "../../redux/messages/messageActions";
 import Typography from "@material-ui/core/Typography";
 import { TextField } from "@material-ui/core";
@@ -22,14 +21,13 @@ const style = {
   p: 4,
 };
 
-const EditModal = ({ open, handleClose, message }) => {
+const EditModal = ({ open, handleClose, message,userID }) => {
   const dispatch = useDispatch();
-  const [messageID, setMessageID] = useState(message.messageID);
   const [messageText, setMessageText] = useState(message.messageText);
-  const [messageTitle, setMessageTitle] = useState(message.messageTitle);
   const handleEdit = (messageText) => {
-    dispatch(updateMessageAction(message._id, messageTitle, messageText));
-    
+    console.log(messageText)
+    dispatch(updateMessageAction(message._id, messageText));
+    dispatch(listMessage());
   };
   return (
     <Modal
@@ -40,9 +38,9 @@ const EditModal = ({ open, handleClose, message }) => {
     >
       <Box sx={style}>
         <TextField
+          disabled
           style={{ width: "100%" }}
           value={message.messageTitle}
-          onChange={(e) => setMessageTitle(e.target.value)}
           id="outlined-basic"
           label="Title"
         />
@@ -50,13 +48,17 @@ const EditModal = ({ open, handleClose, message }) => {
           multiline
           rows={3}
           style={{ width: "100%" }}
-          value={message.messageText}
+          value={messageText}
           onChange={(e) => setMessageText(e.target.value)}
           id="outlined-basic"
           label="Body"
         />
 
-        <Button style={{ marginTop: "10px" }} onClick={handleEdit(messageText)}>
+        <Button
+          style={{ marginTop: "10px" }}
+          onClick={() => handleEdit(messageText)}
+          
+        >
           Submit
         </Button>
       </Box>
@@ -65,3 +67,4 @@ const EditModal = ({ open, handleClose, message }) => {
 };
 
 export default EditModal;
+

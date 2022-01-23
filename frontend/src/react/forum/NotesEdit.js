@@ -3,72 +3,65 @@ import { Form, Button, Row, Col } from "react-bootstrap";
 
 import MainScreen from "../components/MainScreen";
 import { useDispatch, useSelector } from "react-redux";
-import { updateUser } from "../../redux/user/userActions";
+import { updateNoteAction } from "../../redux/forum/noteActions";
 
 import ErrorMessage from "../components/ErrorMessage";
 
 import Loading from "../components/Loading";
 
 const NotesEdit = ({ history }) => {
-  const [userID, setuserID] = useState("");
-  const [userName, setuserName] = useState("");
-  const [password, setPassword] = useState("");
-  const [users, setUsers] = useState([]);
+  const [forumName, setforumName] = useState("");
+  const [forumDescription, setforumDescription] = useState("");
+
 
   const dispatch = useDispatch();
   const userLogin = useSelector((state) => state.userLogin);
   const { userInfo } = userLogin;
+  const noteList = useSelector((state) => state.noteList);
+  const { notes } = noteList;
 
-  const userUpdate = useSelector((state) => state.userUpdate);
-  const { loading, error, success } = userUpdate;
 
   useEffect(() => {
     if (!userInfo) {
       history.push("/notesMe");
     } else {
-      setuserID(userInfo.userID);
-      setuserName(userInfo.userName);
-      setPassword(userInfo.password);
+      setforumName(notes.forumName);
+      setforumDescription(notes.forumDescription);
     }
   }, [history, userInfo]);
   const submitHandler = (e) => {
     e.preventDefault();
-    dispatch(updateUser({ userID, userName, password }));
+    dispatch(updateNoteAction({ forumName, forumDescription }));
   };
+
+  console.log(notes.forumName);
+  console.log(notes.forumDescription);
+  console.log(notes);
+  console.log(noteList);
   return (
     <MainScreen title="EDIT MyNote">
-      <div>
-        <Row className="profileContainer">
+      <div id="ForumEdit">
+        <Row className="ForumContainer">
           <Col md={6}>
             <Form onSubmit={submitHandler}>
-              <Form.Group controlId="userID">
-                <Form.Label>userID</Form.Label>
+              <Form.Group controlId="forumName">
+                <Form.Label>forumName</Form.Label>
                 <Form.Control
-                  id="UserIDInput"
+                  id="forumNameInput"
                   type="text"
-                  placeholder="Enter userID"
-                  value={users.userID}
-                  onChange={(e) => setuserID(e.target.value)}
+                  placeholder="Enter forumName"
+                  value={notes.forumName}
+                  onChange={(e) => setforumName(e.target.value)}
                 ></Form.Control>
               </Form.Group>
-              <Form.Group controlId="userName">
-                <Form.Label>userName</Form.Label>
+              <Form.Group controlId="forumDescription">
+                <Form.Label>forumDescription</Form.Label>
                 <Form.Control
-                  id="UserNameInput"
+                  id="forumDescriptionInput"
                   type="text"
-                  placeholder="Enter userName"
-                  value={users.userName}
-                  onChange={(e) => setuserName(e.target.value)}
-                ></Form.Control>
-              </Form.Group>
-              <Form.Group controlId="password">
-                <Form.Label>Password</Form.Label>
-                <Form.Control
-                  id="PasswordInput"
-                  type="password"
-                  placeholder="Enter Password"
-                  value={users.password}
-                  onChange={(e) => setPassword(e.target.value)}
+                  placeholder="Enter forumDescription"
+                  value={notes.forumDescription}
+                  onChange={(e) => setforumDescription(e.target.value)}
                 ></Form.Control>
               </Form.Group>
               <Button type="submit" varient="primary" onClick={submitHandler}>

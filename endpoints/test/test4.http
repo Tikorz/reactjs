@@ -1,0 +1,183 @@
+//Test it should give one Admin User in database
+###
+https://localhost/publicUser
+
+
+// Login with Basic Authentication with correct credentials admin:123
+###
+# @name loginAdminCorrect
+POST https://localhost/authenticate
+Authorization: Basic YWRtaW46MTIz
+
+// Login with Basic Authentication with wrong credentials
+###
+POST https://localhost/authenticate
+Authorization: Basic admin:1234
+
+@adminToken = {{loginAdminCorrect.response.headers.Authorization}}
+
+### List all users without tokens
+https://localhost/user
+
+### List all users with tokens(Admin)
+https://localhost/user
+Authorization: {{adminToken}}
+
+// Create second user
+###
+POST https://localhost/user
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "userID": "manfred",
+    "userName": "Manfred Mustermann",
+    "password": "asdf"
+}
+
+
+//Change second user
+###
+PUT https://localhost/user
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "userID": "manfred",
+    "userName": "Manfred Müller"
+}
+
+### List all users with tokens(Admin)
+https://localhost/user
+Authorization: {{adminToken}}
+
+//
+// Forum Tests
+//
+### List all forums without tokens
+https://localhost/forum
+
+// Create a first forum, the administrator is the owner
+###
+# @name createForumRequest
+POST https://localhost/forum
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "forumName": "My First Forum",
+    "forumDescription": "Test"
+}
+
+###
+@forumID = {{createForumRequest.response.body._id}}
+
+### List all forums without tokens, now there should be a forum
+https://localhost/forum
+
+### List forums for admin (there should be 1)
+https://localhost/forum/getByOwnerID
+Authorization: {{adminToken}}
+
+### Change the forumDescription in the existing forum
+PUT https://localhost/forum
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "_id": "{{forumID}}",
+    "forumDescription": "Thats the new Text"
+}
+
+### Listing the admin's forums
+https://localhost/forum/getByOwnerID
+Authorization: {{adminToken}}
+
+// Retrieve forums for Manfred. To do this, log in first.
+###
+###
+# @name loginManfred
+POST https://localhost/authenticate
+Authorization: Basic manfred:asdf
+
+@manfredToken = {{loginManfred.response.headers.Authorization}}
+
+###
+###List forums for admin (there should be 1)
+https://localhost/forum/getByOwnerID
+Authorization: {{manfredToken}}
+
+###
+# @name createForumRequest
+POST https://localhost/forum
+Authorization: {{manfredToken}}
+Content-Type: application/json
+
+{
+    "forumName": "Manfreds first forum",
+    "forumDescription": "text from Manfred"
+}
+
+### Listing of the forums for the user manfred, this function should only be used by the admin
+POST https://localhost/forum/getByOwnerID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "ownerID" : "manfred"
+}
+
+### Delete Forum
+DELETE  https://localhost/forum
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "_id": "{{forumID}}"
+}
+
+### List all forum messages without tokens
+https://localhost/forumMessage
+
+###
+# @name createForumMessageRequest
+POST https://localhost/forumMessage
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "forumID": "{{forumID}}",
+    "messageTitle": "My First Message",
+    "messageText": "First Message Test."
+}
+
+###
+// Create with wrong forum ID
+POST https://localhost/forumMessage
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "forumID": "There is not any",
+    "messageTitle": "My First Message",
+    "messageText": "First Message Test."
+}
+
+### Listing all forum messages for forum
+POST https://localhost/forumMessage/getByForumID
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "forumID": "{{forumID}}"
+}
+
+### Delete a forum message
+DELETE  https://localhost/forumMessage
+Authorization: {{adminToken}}
+Content-Type: application/json
+
+{
+    "_id": "6196856afcf7d42fb01a1691"
+}
+
